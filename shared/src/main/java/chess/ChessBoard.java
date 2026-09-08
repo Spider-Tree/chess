@@ -20,7 +20,6 @@ public class ChessBoard {
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
         board[position.getRow()-1][position.getColumn()-1]=piece;
-        throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -31,7 +30,12 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        if (board[position.getRow()-1][position.getColumn()-1]==null){
+            return null;
+        }
+        else{
+            return board[position.getRow()-1][position.getColumn()-1];
+        }
     }
 
     /**
