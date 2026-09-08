@@ -29,4 +29,20 @@ public class ChessPosition {
     public int getColumn() {
         return col;
     }
+    /**
+     * Changes default object equals to work with the chessPositionTests; includes Hashcode
+    **/
+
+    public boolean equals(Object obj){
+        if (this==obj){
+            return true;
+        }
+        if (!(obj instanceof ChessPosition other)){
+            return false;
+        }
+        return row==other.row && col==other.col;
+    }
+    public int hashCode(){
+        return 31* row+col;
+    }
 }
