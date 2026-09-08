@@ -9,8 +9,11 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessPiece {
-
+    private ChessGame.TeamColor color;
+    private ChessPiece.PieceType type;
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+        this.color=pieceColor;
+        this.type=type;
     }
 
     /**
@@ -48,5 +51,10 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         throw new RuntimeException("Not implemented");
+    }
+    /// Help with debugging this won't work need to toString the ENUMs
+    public String toString(){
+        return getTeamColor()+" "+ getPieceType();
+
     }
 }
