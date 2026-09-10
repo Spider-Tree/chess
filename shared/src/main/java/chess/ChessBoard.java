@@ -30,6 +30,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
+        ///double check if I can use == or need to use equals
         if (board[position.getRow()-1][position.getColumn()-1]==null){
             return null;
         }
