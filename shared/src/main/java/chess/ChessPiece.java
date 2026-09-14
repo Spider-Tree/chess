@@ -59,6 +59,55 @@ public class ChessPiece {
         return getTeamColor() + " " + getPieceType();
 
     }
+    @Override
+    public boolean equals(Object o){
+        if (this==o) return true;
+        if (o==null||this.getClass()!=o.getClass()) return false;
+        ChessPiece other=(ChessPiece) o;
+        if (other.getTeamColor()==this.color&&other.getPieceType()==this.type){return true;}
+        else{return false;}
+    }
+    @Override
+    public int hashCode(){
+        int temp=10;
+        if(this.color==ChessGame.TeamColor.WHITE){
+            if (this.type==PieceType.BISHOP){
+                return 12*temp+3;
+            }
+            else if (this.type==PieceType.ROOK){
+                return 11*temp+2;
+            }
+            else if (this.type==PieceType.KING){
+                return 10*temp+4;
+            }
+            else if (this.type==PieceType.PAWN){
+                return 9*temp+3;
+            }
+            else if (this.type==PieceType.QUEEN){
+                return 8*temp+5;
+            }
 
+        }
+        else{
+            temp=12;
+            if (this.type==PieceType.BISHOP){
+                return 12*temp+3;
+            }
+            else if (this.type==PieceType.ROOK){
+                return 11*temp+2;
+            }
+            else if (this.type==PieceType.KING){
+                return 10*temp+4;
+            }
+            else if (this.type==PieceType.PAWN){
+                return 9*temp+3;
+            }
+            else if (this.type==PieceType.QUEEN){
+                return 8*temp+5;
+            }
+        }
+
+        return temp;
+    }
 }
 
