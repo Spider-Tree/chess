@@ -1,4 +1,5 @@
 package chess;
+import java.util.Arrays;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -9,7 +10,7 @@ package chess;
 public class ChessBoard {
     private ChessPiece[][] board=new ChessPiece[8][8];
     public ChessBoard() {
-        
+
     }
 
     /**
@@ -44,10 +45,43 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+
     }
     /**
      *  Loops through each space and generates a visual representation of the chess board. Might be in CHessGame
      */
-    public void displayBoard(){throw new RuntimeException("Not yet implemented");}
+    public void displayBoard(){
+       for (int r=0; r<this.board.length;r++){
+           for (int c=0;c<this.board[r].length;c++){
+               ChessPosition P= new ChessPosition(r,c);
+               System.out.println(this.getPiece(P));
+           }
+       }
+    }
+
+
+    @Override
+    public boolean equals(Object o){
+        if (this==o){return true;}
+        if (o==null||this.getClass()!=o.getClass()){return false;}
+        ChessBoard other =(ChessBoard) o;
+        if (Arrays.deepEquals(this.board,other.board)){return true;}
+        return false;
+    }
+
+    @Override
+    public int hashCode(){
+        int total=0;
+        for (int r=1;r<(this.board.length)+1;r++){
+            for (int c=1;c<(this.board[r-1].length+1);c++){
+                System.out.println(r+" "+c);
+                System.out.println("");
+                ChessPosition Pos=new ChessPosition(r,c);
+                if (this.getPiece(Pos)!=null){
+                total += this.getPiece(Pos).hashCode();}
+                else{total+=r+c;}
+            }
+        }
+        return total;
+    }
 }
