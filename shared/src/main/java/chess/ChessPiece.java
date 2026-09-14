@@ -56,7 +56,28 @@ public class ChessPiece {
 
     /// Help with debugging this won't work need to toString the ENUMs
     public String toString() {
-        return getTeamColor() + " " + getPieceType();
+        String s="error";
+        if (this.type==PieceType.BISHOP){
+            s="b";
+        }
+        else if (this.type==PieceType.ROOK){
+            s="r";
+        }
+        else if (this.type==PieceType.KING){
+            s="k";
+        }
+        else if (this.type==PieceType.PAWN){
+            s="p";
+        }
+        else if (this.type==PieceType.QUEEN){
+            s="q";
+        }
+        if (this.color== ChessGame.TeamColor.WHITE){
+            return s.toUpperCase();
+        }
+        else{
+            return s;
+        }
 
     }
     @Override
