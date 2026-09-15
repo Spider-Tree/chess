@@ -51,7 +51,31 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not implemented");
+        if (this.type==PieceType.BISHOP){
+            Bishop o=new Bishop();
+            return o.pieceMoveBishop(board,myPosition);
+        }
+        else if (this.type==PieceType.ROOK){
+            Rook o=new Rook();
+            return o.pieceMoveRook(board,myPosition);
+        }
+        else if (this.type==PieceType.KING){
+            King o= new King();
+            return o.pieceMoveKing(board,myPosition);
+        }
+        else if (this.type==PieceType.PAWN){
+            Pawn o=new Pawn();
+            return o.pieceMovePawn(board,myPosition);
+        }
+        else if (this.type==PieceType.QUEEN){
+            Queen o= new Queen();
+            return o.pieceMoveQueen(board,myPosition);
+        }
+        else if (this.type==PieceType.KNIGHT){
+            Knight o=new Knight();
+            return o.pieceMoveKnight(board,myPosition);
+        }
+        return null;
     }
 
     /// Help with debugging this won't work need to toString the ENUMs
@@ -71,6 +95,9 @@ public class ChessPiece {
         }
         else if (this.type==PieceType.QUEEN){
             s="q";
+        }
+        else if (this.type==PieceType.KNIGHT){
+            s="n";
         }
         if (this.color== ChessGame.TeamColor.WHITE){
             return s.toUpperCase();

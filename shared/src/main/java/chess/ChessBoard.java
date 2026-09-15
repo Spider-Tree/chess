@@ -8,9 +8,12 @@ import java.util.Arrays;
  * signature of the existing methods.
  */
 public class ChessBoard {
-    private ChessPiece[][] board=new ChessPiece[8][8];
+    private ChessPiece[][] board;
     public ChessBoard() {
-
+        board=new ChessPiece[8][8];
+    }
+    public ChessBoard(ChessPiece[][] board){
+        this.board=board;
     }
 
     /**
@@ -74,8 +77,7 @@ public class ChessBoard {
         int total=0;
         for (int r=1;r<(this.board.length)+1;r++){
             for (int c=1;c<(this.board[r-1].length+1);c++){
-                System.out.println(r+" "+c);
-                System.out.println("");
+
                 ChessPosition Pos=new ChessPosition(r,c);
                 if (this.getPiece(Pos)!=null){
                 total += this.getPiece(Pos).hashCode();}
