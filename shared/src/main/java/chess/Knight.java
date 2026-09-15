@@ -8,7 +8,7 @@ public class Knight {
     public Knight(){}
     public Collection<ChessMove> pieceMoveKnight(ChessBoard board, ChessPosition myPosition){
 
-        // 2 1 or 1 2 and 4 different directions.
+        // check the different directions
         checkL(board,myPosition,1,1);
         checkL(board,myPosition,-1,1);
         checkL(board,myPosition,1,-1);
