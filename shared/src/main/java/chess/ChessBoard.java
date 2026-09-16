@@ -34,7 +34,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        ///double check if I can use == or need to use equals
+
         if (board[position.getRow()-1][position.getColumn()-1]==null){
             return null;
         }
@@ -85,5 +85,17 @@ public class ChessBoard {
             }
         }
         return total;
+    }
+    @Override
+    public String toString(){
+        String tempTotal="";
+        for(int r=1;r<this.board.length+1;r++){
+            for (int c=1;c<(this.board[r-1].length+1);c++){
+
+                 tempTotal+=this.getPiece(new ChessPosition(r,c)).toString();
+            }
+        }
+        return tempTotal;
+
     }
 }

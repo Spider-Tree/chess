@@ -78,5 +78,14 @@ public class ChessMove {
     }
         return 47 * (3*end.getRow()+10*end.getColumn()+2*start.getRow()+start.getColumn()+temp);
     }
+    @Override
+    public String toString(){
+        if (promotion==null) {
+            return "Start: " + start + ", End: " + end + ", will NOT promote";
+        }
+        else{
+            return "Start: " + start+ ", End: " + end + ", will promote";
+        }
+        }
 
 }

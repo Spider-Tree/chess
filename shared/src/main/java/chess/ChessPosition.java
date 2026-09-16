@@ -32,7 +32,7 @@ public class ChessPosition {
     /**
      * Changes default object equals to work with the chessPositionTests; includes Hashcode
     **/
-
+    @Override
     public boolean equals(Object obj){
         if (this==obj){
             return true;
@@ -42,7 +42,13 @@ public class ChessPosition {
         }
         return row==other.row && col==other.col;
     }
+    @Override
     public int hashCode(){
         return 31* row+col;
+    }
+    @Override
+    public String toString(){
+        //(row, col)
+        return ("("+row+", "+col+")");
     }
 }
