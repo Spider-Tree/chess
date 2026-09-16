@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Pawn {
-    ArrayList<ChessMove> allPos;
+    ArrayList<ChessMove> allPos=new ArrayList<>();
     public Pawn(){}
     public Collection<ChessMove> pieceMovePawn(ChessBoard board, ChessPosition myPosition){
        ChessGame.TeamColor color =board.getPiece(myPosition).getTeamColor();

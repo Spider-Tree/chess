@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Bishop {
-    ArrayList<ChessMove> allPos;
+    ArrayList<ChessMove> allPos=new ArrayList<>();
     public Bishop() {
     }
 

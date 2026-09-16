@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class King {
-    ArrayList<ChessMove> allpos;
+    ArrayList<ChessMove> allpos=new ArrayList<>();
     public King(){}
     public Collection<ChessMove> pieceMoveKing(ChessBoard board, ChessPosition myPosition){
         int row=myPosition.getRow();

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Knight {
-    ArrayList<ChessMove> allpos;
+    ArrayList<ChessMove> allpos=new ArrayList<>();
     public Knight(){}
     public Collection<ChessMove> pieceMoveKnight(ChessBoard board, ChessPosition myPosition){
 

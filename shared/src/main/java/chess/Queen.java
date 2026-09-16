@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Queen {
-    ArrayList<ChessMove> allpos;
+    ArrayList<ChessMove> allpos=new ArrayList<>();
     public Queen(){}
     public Collection<ChessMove> pieceMoveQueen(ChessBoard board, ChessPosition myPosition){
         Collection<ChessMove> straightLines = new Rook().pieceMoveRook(board,myPosition);

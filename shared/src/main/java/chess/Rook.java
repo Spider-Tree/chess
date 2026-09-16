@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Rook {
-    ArrayList<ChessMove> allPos;
+    ArrayList<ChessMove> allPos=new ArrayList<>();
     public Rook(){}
     public Collection<ChessMove> pieceMoveRook(ChessBoard board, ChessPosition myPosition){
         checkCol(board,myPosition,1);
