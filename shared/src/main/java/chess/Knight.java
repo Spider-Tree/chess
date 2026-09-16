@@ -20,8 +20,9 @@ public class Knight {
         int col=start.getColumn();
         int row= start.getRow();
         ChessGame.TeamColor color=b.getPiece(start).getTeamColor();
-        ChessPosition pos1= new ChessPosition((2*directionVert)+row,(directionHori)+row);
+        ChessPosition pos1= new ChessPosition((2*directionVert)+row,(directionHori)+col);
         ChessPosition pos2= new ChessPosition(directionVert+row,(2*directionHori)+col);
+
         if (pos1.getRow()<9&&pos1.getColumn()<9&&0<pos1.getRow()&&0<pos1.getColumn()){
         if (null==b.getPiece(pos1)){
             allpos.add(new ChessMove(start,pos1,null));}
@@ -29,10 +30,11 @@ public class Knight {
             allpos.add(new ChessMove(start,pos1,null));
         }
         }
+
         if (pos2.getRow()<9&&pos2.getColumn()<9&&0<pos2.getRow()&&0<pos2.getColumn()) {
             if (null == b.getPiece(pos2)) {
-                allpos.add(new ChessMove(start, pos1, null));
-            } else if (color != b.getPiece(pos1).getTeamColor()) {
+                allpos.add(new ChessMove(start, pos2, null));
+            } else if (color != b.getPiece(pos2).getTeamColor()) {
                 allpos.add(new ChessMove(start, pos2, null));
             }
         }
