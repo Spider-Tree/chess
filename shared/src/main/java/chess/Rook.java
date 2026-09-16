@@ -15,8 +15,8 @@ public class Rook {
     }
     public void checkCol(ChessBoard b, ChessPosition start, int direction){
         ChessGame.TeamColor color=b.getPiece(start).getTeamColor();
-        int col=start.getRow();
-        for (int r= start.getRow(); r<9 &&0<r;r+=direction){
+        int col=start.getColumn();
+        for (int r= start.getRow()+direction; r<9 &&0<r;r+=direction){
             if (null==b.getPiece(new ChessPosition(r,col))){
                 allPos.add(new ChessMove(start,new ChessPosition(r,col),null));
             }
@@ -31,13 +31,13 @@ public class Rook {
     }
     public void checkRow(ChessBoard b, ChessPosition start, int direction){
         ChessGame.TeamColor color=b.getPiece(start).getTeamColor();
-        int row=start.getColumn();
-        for (int c= start.getColumn(); c<9 &&0<c;c+=direction){
-            if (null==b.getPiece(new ChessPosition(c,row))){
-                allPos.add(new ChessMove(start,new ChessPosition(c,row),null));
+        int row=start.getRow();
+        for (int c= start.getColumn()+direction; c<9 &&0<c;c+=direction){
+            if (null==b.getPiece(new ChessPosition(row,c))){
+                allPos.add(new ChessMove(start,new ChessPosition(row,c),null));
             }
-            else if(color!=b.getPiece(new ChessPosition(c,row)).getTeamColor()){
-                allPos.add(new ChessMove(start,new ChessPosition(c,row),null));
+            else if(color!=b.getPiece(new ChessPosition(row,c)).getTeamColor()){
+                allPos.add(new ChessMove(start,new ChessPosition(row,c),null));
                 c=12;
             }
             else{
