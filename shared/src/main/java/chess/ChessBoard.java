@@ -48,6 +48,29 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
+        //Pawns->Rooks->Knights->Bishops->Queens->Kings
+        for (int c=1;c<9;c++){
+            this.addPiece(new ChessPosition(2,c),new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN));
+            this.addPiece(new ChessPosition(7,c),new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
+        }
+        for (int c=1;c<9;c+=7){
+            this.addPiece(new ChessPosition(1,c),new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
+            this.addPiece(new ChessPosition(8,c),new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
+        }
+        for (int c=2;c<9;c+=5){
+            this.addPiece(new ChessPosition(1,c),new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT));
+            this.addPiece(new ChessPosition(8,c),new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
+        }
+        for (int c=3;c<8;c+=3){
+            this.addPiece(new ChessPosition(1,c),new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP));
+            this.addPiece(new ChessPosition(8,c),new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP));
+        }
+
+        this.addPiece(new ChessPosition(1,4),new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN));
+        this.addPiece(new ChessPosition(8,4),new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN));
+
+        this.addPiece(new ChessPosition(1,5),new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING));
+        this.addPiece(new ChessPosition(8,5),new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING));
 
     }
     /**
