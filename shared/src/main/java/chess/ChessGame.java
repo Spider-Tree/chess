@@ -117,7 +117,25 @@ public class ChessGame {
         //if temp board isIncheck=false add move to validMoveList
         //
         //
-        throw new RuntimeException("Not implemented");
+        TeamColor color=currentBoard.getPiece(startPosition).getTeamColor();
+        ArrayList<ChessMove> allMoves=new ArrayList<>();
+        ArrayList<ChessMove> validMoves=new ArrayList<>();
+        allMoves.addAll(currentBoard.getPiece(startPosition).pieceMoves(currentBoard,startPosition));
+        ChessBoard testBoard=currentBoard;
+        ChessBoard currentGameState=currentBoard;
+
+        for (ChessMove move: allMoves){
+            testBoard=currentGameState;
+            testBoard.makeMove(move);
+            currentBoard=testBoard;
+            if(!this.isInCheck(color)){
+                validMoves.add(move);
+            }
+          //  if()
+        }
+        currentBoard=currentGameState;
+
+        return validMoves;
     }
 
     /**
