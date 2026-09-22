@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.ArrayList;
 
 /**
  * A class that can manage a chess game, making moves on a board
@@ -9,8 +10,21 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessGame {
-
+    private int turnCounter=0;
+    private boolean teamTurn=true;
+    private ChessBoard currentBoard;
+    // 0 index will be White King,1 index will be Black King
+    private ChessPosition[] kingLookup={null,null};
     public ChessGame() {
+        this.currentBoard=new ChessBoard();
+        currentBoard.resetBoard();
+        kingLookup[0]=new ChessPosition(1,5);
+        kingLookup[1]= new ChessPosition(8,5);
+    }
+    public ChessGame(ChessBoard board, boolean teamTurn, ChessPosition[] lookup){
+        this.teamTurn=teamTurn;
+        this.currentBoard=board;
+        this.kingLookup=lookup;
 
     }
 
@@ -18,16 +32,48 @@ public class ChessGame {
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        throw new RuntimeException("Not implemented");
+        if (teamTurn){
+            return TeamColor.WHITE;
+        }
+        else{
+            return TeamColor.BLACK;
+        }
+
     }
 
+
+    public ChessPosition getKingPosition(TeamColor color){
+        if (color==TeamColor.WHITE){
+            return kingLookup[0];
+        }
+        else{
+            return kingLookup[1];
+        }
+    }
+
+    public void setKingPosition(TeamColor color,ChessPosition pos){
+        if (color==TeamColor.WHITE){
+            kingLookup[0]=pos;
+        }
+        else{
+            kingLookup[1]=pos;
+        }
+    }
     /**
      * Sets which teams turn it is
      *
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
+        if (team==TeamColor.WHITE){
+            teamTurn=true;
+        }
+        else if (team==TeamColor.BLACK){
+            teamTurn=false;
+        }
+        else{
+            System.out.println("Something broke");
+        }
     }
 
     /**
@@ -46,6 +92,7 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
+
         throw new RuntimeException("Not implemented");
     }
 
@@ -66,7 +113,31 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+
+        //code that goes through each position and gets all moves each position on the opposing team could make
+        //if position is null or own team color ignore it.
+        //create a collection of all their moves
+        //see if any moves have an END position that overlaps with Kings current Position.
+        ArrayList<ChessMove> total=new ArrayList<>();
+        for (int r=1;r<9;r++){
+            for (int c=1;c<9;c++){
+                 ChessPiece P=currentBoard.getPiece(new ChessPosition(r,c));
+                 if (teamColor!=P.getTeamColor()){
+                 total.addAll(P.pieceMoves(currentBoard,new ChessPosition(r,c)));
+                 }
+            }
+        }
+        for (ChessMove move:total){
+            if(this.getKingPosition(teamColor)==move.getEndPosition()){
+                return true;
+            }
+        }
+
+
+
+        //also should go back and see if I can change ChessPiece to has all move logic.
+
+        return false;
     }
 
     /**
@@ -96,7 +167,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        this.currentBoard=board;
     }
 
     /**
@@ -105,6 +176,19 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return currentBoard;
+    }
+
+    @Override
+    public int hashCode(){
+        return 1;
+    }
+    @Override
+    public String toString(){
+        return "Not done yet";
+    }
+    @Override
+    public boolean equals(Object obj){
+        return false;
     }
 }
