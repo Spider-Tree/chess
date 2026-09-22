@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * signature of the existing methods.
  */
 public class ChessGame {
-    private int turnCounter=0;
+    private int turnCounter=1;
     private boolean teamTurn=true;
     private ChessBoard currentBoard;
     // 0 index will be White King,1 index will be Black King
@@ -20,6 +20,25 @@ public class ChessGame {
         currentBoard.resetBoard();
         kingLookup[0]=new ChessPosition(1,5);
         kingLookup[1]= new ChessPosition(8,5);
+    }
+    public ChessGame(ChessBoard board, boolean teamTurn){
+        this.teamTurn=teamTurn;
+        this.currentBoard=board;
+        for(int r=1;r<9;r++){
+            for(int c=1;c<9;c++){
+                ChessPiece P=currentBoard.getPiece(new ChessPosition(r,c));
+                if(P.getTeamColor()==TeamColor.WHITE && P.getPieceType()==ChessPiece.PieceType.KING){
+                    ChessPosition Pos=new ChessPosition(r,c);
+                    kingLookup[0]=Pos;
+                }
+                else if(P.getPieceType()== ChessPiece.PieceType.KING){
+                    ChessPosition Pos=new ChessPosition(r,c);
+                    kingLookup[1]=Pos;
+                }
+            }
+        }
+        //If there is not two kings return invalid board error
+
     }
     public ChessGame(ChessBoard board, boolean teamTurn, ChessPosition[] lookup){
         this.teamTurn=teamTurn;
@@ -92,7 +111,12 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-
+        //Given Postion->getCollection of all moves
+        //create a function that makes move
+        //make temporary new board if the new move made
+        //if temp board isIncheck=false add move to validMoveList
+        //
+        //
         throw new RuntimeException("Not implemented");
     }
 
@@ -104,6 +128,7 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         throw new RuntimeException("Not implemented");
+        //addPiece  null which removes.
     }
 
     /**
@@ -132,9 +157,6 @@ public class ChessGame {
                 return true;
             }
         }
-
-
-
         //also should go back and see if I can change ChessPiece to has all move logic.
 
         return false;
@@ -147,6 +169,9 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
+        //Check to see if the team has any valid moves.
+        //If team validMoves is empty. && isinCheck is true return true
+
         throw new RuntimeException("Not implemented");
     }
 
@@ -158,6 +183,7 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
+        // if validMove empty && not in check is stalement
         throw new RuntimeException("Not implemented");
     }
 
@@ -185,7 +211,7 @@ public class ChessGame {
     }
     @Override
     public String toString(){
-        return "Not done yet";
+        return "Game Turn: "+turnCounter;
     }
     @Override
     public boolean equals(Object obj){
