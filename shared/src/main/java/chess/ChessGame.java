@@ -111,12 +111,8 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        //Given Postion->getCollection of all moves
-        //create a function that makes move
-        //make temporary new board if the new move made
-        //if temp board isIncheck=false add move to validMoveList
-        //
-        //
+
+       //Prepare Variables
         TeamColor color=currentBoard.getPiece(startPosition).getTeamColor();
         ArrayList<ChessMove> allMoves=new ArrayList<>();
         ArrayList<ChessMove> validMoves=new ArrayList<>();
@@ -124,6 +120,7 @@ public class ChessGame {
         ChessBoard testBoard=currentBoard;
         ChessBoard currentGameState=currentBoard;
 
+        //For each move check to see if it is valid
         for (ChessMove move: allMoves){
             testBoard=currentGameState;
             testBoard.makeMove(move);
@@ -131,7 +128,7 @@ public class ChessGame {
             if(!this.isInCheck(color)){
                 validMoves.add(move);
             }
-          //  if()
+
         }
         currentBoard=currentGameState;
 
@@ -146,7 +143,7 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         throw new RuntimeException("Not implemented");
-        //addPiece  null which removes.
+
     }
 
     /**
@@ -175,7 +172,7 @@ public class ChessGame {
                 return true;
             }
         }
-        //also should go back and see if I can change ChessPiece to has all move logic.
+
 
         return false;
     }
@@ -186,11 +183,31 @@ public class ChessGame {
      * @param teamColor which team to check for checkmate
      * @return True if the specified team is in checkmate
      */
+    public Collection<ChessMove> getAllValid(TeamColor teamColor){
+        ArrayList<ChessMove> totalValid=new ArrayList<>();
+        for(int r=1;r<9;r++){
+            for(int c=1;c<9;c++){
+                ChessPiece P=currentBoard.getPiece(new ChessPosition(r,c));
+                if(P.getTeamColor()==teamColor){
+                    totalValid.addAll(this.validMoves(new ChessPosition(r,c)));
+                }
+            }
+        }
+        return totalValid;
+    }
     public boolean isInCheckmate(TeamColor teamColor) {
         //Check to see if the team has any valid moves.
         //If team validMoves is empty. && isinCheck is true return true
+        ArrayList<ChessMove> valid=new ArrayList<>();
+        valid.addAll(getAllValid(teamColor));
 
-        throw new RuntimeException("Not implemented");
+        //isEmpty might not work the way I want depending on how addAll works
+        if(valid.isEmpty()&&isInCheck(teamColor)){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     /**
