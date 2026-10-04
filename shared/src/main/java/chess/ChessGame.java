@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.ArrayList;
 
@@ -314,11 +315,19 @@ public class ChessGame {
 
     @Override
     public int hashCode(){
-        return 1;
+        if (teamTurn){
+        return turnCounter+ currentBoard.hashCode();}
+        else{
+            return turnCounter+currentBoard.hashCode()+12;
+        }
     }
 
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(Object o){
+        if (this==o){return true;}
+        if (o==null||this.getClass()!=o.getClass()){return false;}
+        ChessGame other =(ChessGame) o;
+        if (other.currentBoard.equals(this.currentBoard)&&(this.turnCounter==other.turnCounter)&&this.teamTurn== other.teamTurn){return true;}
         return false;
     }
 }

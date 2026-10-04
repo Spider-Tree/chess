@@ -35,7 +35,7 @@ public class ChessBoard {
 
     public void makeMove(ChessMove Move){
         if(Move.getPromotionPiece()==null){
-
+            
             ChessPiece piece=this.getPiece(Move.getStartPosition());
             this.addPiece(Move.getStartPosition(),null);
             this.addPiece(Move.getEndPosition(),piece);
