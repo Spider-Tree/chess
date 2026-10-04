@@ -151,7 +151,36 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        if(null==currentBoard.getPiece(move.getStartPosition())){
+            throw new InvalidMoveException();
+        }
+        if(getTeamTurn()!=currentBoard.getPiece(move.getStartPosition()).getTeamColor()){
+            throw new InvalidMoveException();
+        }
+        Collection<ChessMove> potential =validMoves(move.getStartPosition());
+        boolean valid=false;
+        for (ChessMove m: potential){
+            if (m.equals(move)) {
+                valid = true;
+                break;
+            }
+        }
+        if(valid){
+            if (currentBoard.getPiece(move.getStartPosition()).getTeamColor()==TeamColor.WHITE)
+            {
+                setTeamTurn(TeamColor.BLACK);
+            }
+            else{
+                setTeamTurn(TeamColor.WHITE);
+            }
+            currentBoard.makeMove(move);
+            turnCounter+=1;
+
+        }
+        else{
+            throw new InvalidMoveException();
+        }
+
 
     }
 
@@ -278,10 +307,7 @@ public class ChessGame {
     public int hashCode(){
         return 1;
     }
-    @Override
-    public String toString(){
-        return "Game Turn: "+turnCounter;
-    }
+
     @Override
     public boolean equals(Object obj){
         return false;
