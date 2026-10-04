@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.Arrays;
+
 /**
  * Represents a single square position on a chess board
  * <p>
@@ -33,17 +35,19 @@ public class ChessPosition {
      * Changes default object equals to work with the chessPositionTests; includes Hashcode
     **/
     @Override
-    public boolean equals(Object obj){
-        if (this==obj){
+    public boolean equals(Object o){
+        if (this==o){return true;}
+        if (o==null||this.getClass()!=o.getClass()){return false;}
+        ChessPosition other =(ChessPosition) o;
+        if (this.getColumn()== other.getColumn() && this.getRow()==other.getRow()){
             return true;
         }
-        if (!(obj instanceof ChessPosition other)){
-            return false;
-        }
-        return row==other.row && col==other.col;
+        else{return false;}
+
     }
     @Override
     public int hashCode(){
+
         return 31* row+col;
     }
     @Override
