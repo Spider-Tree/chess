@@ -119,20 +119,27 @@ public class ChessGame {
         ArrayList<ChessMove> allMoves=new ArrayList<>();
         ArrayList<ChessMove> vMoves=new ArrayList<>();
         allMoves.addAll(currentBoard.getPiece(startPosition).pieceMoves(currentBoard,startPosition));
-        ChessBoard testBoard=currentBoard;
-        ChessBoard currentGameState=currentBoard;
+        //ChessBoard testBoard=currentBoard;
+        ChessPosition actualPos= new ChessPosition(getKingPosition(color));
+        ChessBoard currentGameState=new ChessBoard(currentBoard);
 
         //For each move check to see if it is valid
         for (ChessMove move: allMoves){
-            testBoard=currentGameState;
-            testBoard.makeMove(move);
-            currentBoard=testBoard;
+            currentBoard=new ChessBoard(currentGameState);
+            if(currentBoard.getPiece(move.getStartPosition()).getPieceType()== ChessPiece.PieceType.KING){
+                currentBoard.makeMove(move);
+                setKingPosition(color,move.getEndPosition());
+            }
+            else{currentBoard.makeMove(move);}
+
+           // currentBoard=testBoard;
             if(!this.isInCheck(color)){
                 vMoves.add(move);
             }
 
         }
         currentBoard=currentGameState;
+        setKingPosition(color,actualPos);
 
         return vMoves;
     }
@@ -211,7 +218,7 @@ public class ChessGame {
         //If team validMoves is empty. && isinCheck is true return true
         ArrayList<ChessMove> valid=new ArrayList<>();
         valid.addAll(getAllValid(teamColor));
-
+        System.out.println(valid);
         //isEmpty might not work the way I want depending on how addAll works
         if(valid.isEmpty()&&isInCheck(teamColor)){
             return true;

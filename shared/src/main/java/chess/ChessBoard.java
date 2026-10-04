@@ -15,6 +15,13 @@ public class ChessBoard {
     public ChessBoard(ChessPiece[][] board){
         this.board=board;
     }
+    public ChessBoard(ChessBoard CB){
+        ChessPiece[][] deepCopy=new ChessPiece[8][8];
+        for (int x=0;x<8;x++){
+            deepCopy[x]=Arrays.copyOf(CB.board[x],8);
+        }
+        this.board=deepCopy;
+    }
 
     /**
      * Adds a chess piece to the chessboard
@@ -28,6 +35,7 @@ public class ChessBoard {
 
     public void makeMove(ChessMove Move){
         if(Move.getPromotionPiece()==null){
+
             ChessPiece piece=this.getPiece(Move.getStartPosition());
             this.addPiece(Move.getStartPosition(),null);
             this.addPiece(Move.getEndPosition(),piece);
