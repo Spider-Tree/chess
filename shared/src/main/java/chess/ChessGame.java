@@ -247,7 +247,7 @@ public class ChessGame {
         //If team validMoves is empty. && isinCheck is true return true
         ArrayList<ChessMove> valid=new ArrayList<>();
         valid.addAll(getAllValid(teamColor));
-        System.out.println(valid);
+      //  System.out.println(valid);
         //isEmpty might not work the way I want depending on how addAll works
         if(valid.isEmpty()&&isInCheck(teamColor)){
             return true;
@@ -266,7 +266,16 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
         // if validMove empty && not in check is stalement
-        throw new RuntimeException("Not implemented");
+        ArrayList<ChessMove> valid=new ArrayList<>();
+        valid.addAll(getAllValid(teamColor));
+        //  System.out.println(valid);
+        //isEmpty might not work the way I want depending on how addAll works
+        if(valid.isEmpty()&& !isInCheck(teamColor)){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     /**
