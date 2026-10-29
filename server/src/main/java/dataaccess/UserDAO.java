@@ -1,6 +1,7 @@
 package dataaccess;
 
 import model.UserData;
+import service.*;
 
 public interface UserDAO {
     void clear() throws DataAccessException;
