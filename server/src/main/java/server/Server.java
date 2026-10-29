@@ -14,10 +14,10 @@ public class Server {
     private final GameService gameService;
     private final AuthService authService;
 
-    public Server(AuthDAO authDAO, UserDAO userDAO, GameDAO gameDAO) {
-        userService=new UserService(userDAO);
-        gameService=new GameService(gameDAO);
-        authService=new AuthService(authDAO);
+    public Server() {
+        userService=new UserService(new MemoryUserDAO());
+        gameService=new GameService(new MemoryGameDAO());
+        authService=new AuthService(new MemoryAuthDAO());
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"))
                 //.post("/user", this::addUser)
