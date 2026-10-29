@@ -2,7 +2,7 @@ package dataaccess;
 import model.*;
 import java.util.HashMap;
 public class MemoryUserDAO implements UserDAO{
-    final private HashMap<Integer, UserData> users =new HashMap<>();
+    final private HashMap<String, UserData> users =new HashMap<>();
 
     @Override
     public void clear(){
@@ -11,11 +11,15 @@ public class MemoryUserDAO implements UserDAO{
 
     @Override
     public void createUser(UserData userdata) throws AlreadyTakenException {
-
+        if (null!=users.get(userdata.username())){
+            throw new AlreadyTakenException("Username already exists");
+        }
+        users.put(userdata.username(),userdata);
     }
 
     @Override
     public UserData getUser(String username) throws DataAccessException {
-        return null;
+        return users.get(username);
+
     }
 }

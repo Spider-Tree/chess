@@ -1,6 +1,8 @@
 package service;
+import dataaccess.AlreadyTakenException;
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
+import model.UserData;
 
 //import java.util.Collection;
 public class UserService {
@@ -12,5 +14,9 @@ public class UserService {
     public void clear() throws DataAccessException{
         dataAccess.clear();
 
+    }
+    public UserData addUser(UserData user) throws AlreadyTakenException, DataAccessException {
+        dataAccess.createUser(user);
+        return dataAccess.getUser(user.username());
     }
 }

@@ -7,6 +7,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.util.Map;
 import service.*;
+import model.*;
 public class Server {
 
     private final Javalin javalin;
@@ -22,6 +23,7 @@ public class Server {
         javalin = Javalin.create(config -> config.staticFiles.add("web"))
                 //.post("/user", this::addUser)
                 .delete("/db",this::clearAll)
+                .post("/user",this::addUser)
 
         ;
 
@@ -42,6 +44,11 @@ public class Server {
         userService.clear();
         gameService.clear();
         ctx.status(204);
+    }
+    public void addUser(Context ctx) throws AlreadyTakenException, DataAccessException {
+        UserData user = new Gson().fromJson(ctx.body(),UserData.class);
+        user = userService.addUser(user);
+        ctx.json(user.toString());
     }
 
 
