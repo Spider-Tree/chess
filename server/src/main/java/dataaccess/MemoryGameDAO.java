@@ -4,6 +4,8 @@ import model.GameData;
 import model.UserData;
 import service.ListGamesResult;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class MemoryGameDAO implements GameDAO{
@@ -25,8 +27,10 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public ListGamesResult listGames() throws DataAccessException {
-        return null;
+    public Collection<GameData> listGames() throws DataAccessException {
+        ArrayList<GameData> total = new ArrayList<>(games.values());
+        System.out.println(total);
+        return total;
     }
 
     @Override

@@ -7,6 +7,8 @@ import io.javalin.http.Context;
 import service.*;
 import model.*;
 
+import java.util.Collection;
+
 public class Server {
 
     private final Javalin javalin;
@@ -25,6 +27,7 @@ public class Server {
                 .post("/user",this::addUser)
                 .post("/session",this::loginUser)
                 .delete("/session",this::logoutUser)
+                .get("/game",this::listGames)
                 .exception(DataAccessException.class,this::errorHandler)
 
 
@@ -87,5 +90,14 @@ public class Server {
         ctx.status(200);
     }
 
-
+    private void listGames(Context ctx) throws DataAccessException{
+        String authToken=ctx.header("Authorization");
+        if(authToken==null||authToken.isBlank()||authService.getAuthData(authToken)==null){
+            throw new DataAccessException(DataAccessException.Code.UNAUTHORIZED_ERROR,"Error: unauthorized");
+        }
+        Collection<GameData> games = gameService.listGames();
+        ListGamesResult result = new ListGamesResult(games);
+        var jsonResult=serializer.toJson(result);
+        ctx.json(jsonResult);
+    }
 }
