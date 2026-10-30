@@ -12,6 +12,7 @@ public class DataAccessException extends Exception {
         UNAUTHORIZED_ERROR
 
 
+
     }
     final private Code code;
 

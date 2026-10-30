@@ -13,6 +13,7 @@ public class UserService {
     public void clear() throws DataAccessException{
         dataAccess.clear();
 
+
     }
     public UserData addUser(UserData user) throws DataAccessException {
         dataAccess.createUser(user);

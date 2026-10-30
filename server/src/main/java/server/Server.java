@@ -44,6 +44,7 @@ public class Server {
         userService.clear();
         gameService.clear();
         ctx.status(200);
+
     }
     private void addUser(Context ctx) throws DataAccessException {
         UserData user = serializer.fromJson(ctx.body(),UserData.class);
