@@ -5,7 +5,7 @@ import service.*;
 
 public interface AuthDAO {
     void clear() throws DataAccessException;
-    LoginResult createAuth() throws DataAccessException;
+    void createAuth(AuthData authdata) throws DataAccessException;
     AuthData getAuth(String authToken) throws DataAccessException;
     ClearResult deleteAuth() throws DataAccessException;
 
