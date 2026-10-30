@@ -44,7 +44,7 @@ public class Server {
         authService.clear();
         userService.clear();
         gameService.clear();
-        ctx.status(204);
+        ctx.status(200);
     }
     public void addUser(Context ctx) throws AlreadyTakenException, DataAccessException {
         UserData user = serializer.fromJson(ctx.body(),UserData.class);

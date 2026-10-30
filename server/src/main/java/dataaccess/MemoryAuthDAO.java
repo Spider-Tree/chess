@@ -1,9 +1,7 @@
 package dataaccess;
 
 import model.AuthData;
-import model.UserData;
-import service.ClearResult;
-import service.LoginResult;
+import service.LogoutResult;
 
 import java.util.HashMap;
 
@@ -27,7 +25,11 @@ public class MemoryAuthDAO implements AuthDAO{
     }
 
     @Override
-    public ClearResult deleteAuth() throws DataAccessException {
+    public LogoutResult deleteAuth() throws DataAccessException {
         return null;
+    }
+    @Override
+    public HashMap<String,AuthData> getMemory(){
+        return auths;
     }
 }

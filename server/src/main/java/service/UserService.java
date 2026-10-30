@@ -21,4 +21,7 @@ public class UserService {
         return dataAccess.getUser(user.username());
 
     }
+    public UserDAO getDataAccess(){
+        return dataAccess;
+    }
 }
