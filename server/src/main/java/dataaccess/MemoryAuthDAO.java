@@ -8,7 +8,7 @@ import service.LoginResult;
 import java.util.HashMap;
 
 public class MemoryAuthDAO implements AuthDAO{
-    final private HashMap<Integer, AuthData> auths =new HashMap<>();
+    final private HashMap<String, AuthData> auths =new HashMap<>();
 
     @Override
     public void clear() throws DataAccessException {
@@ -16,13 +16,14 @@ public class MemoryAuthDAO implements AuthDAO{
     }
 
     @Override
-    public LoginResult createAuth() throws DataAccessException {
-        return null;
+    public void createAuth(AuthData authdata) throws DataAccessException {
+        auths.put(authdata.authToken(),authdata);
+
     }
 
     @Override
     public AuthData getAuth(String authToken) throws DataAccessException {
-        return null;
+        return auths.get(authToken);
     }
 
     @Override

@@ -17,6 +17,8 @@ public class UserService {
     }
     public UserData addUser(UserData user) throws AlreadyTakenException, DataAccessException {
         dataAccess.createUser(user);
+
         return dataAccess.getUser(user.username());
+
     }
 }

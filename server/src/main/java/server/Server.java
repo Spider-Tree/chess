@@ -1,20 +1,21 @@
 package server;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dataaccess.*;
-import dataaccess.DataAccessException;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.util.Map;
 import service.*;
 import model.*;
+
 public class Server {
 
     private final Javalin javalin;
     private final UserService userService;
     private final GameService gameService;
     private final AuthService authService;
-
+    private final Gson serializer= new Gson();
     public Server() {
         userService=new UserService(new MemoryUserDAO());
         gameService=new GameService(new MemoryGameDAO());
@@ -46,9 +47,13 @@ public class Server {
         ctx.status(204);
     }
     public void addUser(Context ctx) throws AlreadyTakenException, DataAccessException {
-        UserData user = new Gson().fromJson(ctx.body(),UserData.class);
+        UserData user = serializer.fromJson(ctx.body(),UserData.class);
+
         user = userService.addUser(user);
-        ctx.json(user.toString());
+        AuthData auth=authService.createAuth(user.username());
+        RegisterResult result=new RegisterResult(user.username(), auth.authToken());
+        var jsonResult = serializer.toJson(result);
+        ctx.json(jsonResult);
     }
 
 
