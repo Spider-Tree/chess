@@ -23,10 +23,17 @@ public class AuthService {
     public void addAuth(AuthData auth) throws DataAccessException{
         dataAccess.createAuth(auth);
     }
-    public AuthData getAuthData(String username) throws DataAccessException {
-        return dataAccess.getAuth(username);
+    public AuthData getAuthData(String authToken) throws DataAccessException {
+        return dataAccess.getAuth(authToken);
     }
     public AuthDAO getDataAccess(){
         return dataAccess;
+    }
+    public void logout(String token) throws DataAccessException {
+        AuthData auth =dataAccess.getAuth(token);
+        if(auth==null){
+            throw new DataAccessException(DataAccessException.Code.UNAUTHORIZED_ERROR,"Error: unauthorized");
+        }
+        dataAccess.deleteAuth(token);
     }
 }

@@ -40,4 +40,17 @@ class AuthServiceTest {
         AuthData auth =testAuthService.createAuth("test1");
         assertEquals(auth,testAuthService.getAuthData(auth.authToken()));
     }
+    @Test
+    void logout() throws DataAccessException{
+        testAuthService.logout(testAuthData.authToken());
+        assertTrue(testAuthService.getDataAccess().getMemory().isEmpty());
+    }
+    @Test
+    void logoutWrongUser(){
+        assertThrows(DataAccessException.class,() ->{
+            testAuthService.logout("notCorrectToken");
+
+        });
+
+    }
 }

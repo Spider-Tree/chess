@@ -24,7 +24,9 @@ public class Server {
                 .delete("/db",this::clearAll)
                 .post("/user",this::addUser)
                 .post("/session",this::loginUser)
+                .delete("/session",this::logoutUser)
                 .exception(DataAccessException.class,this::errorHandler)
+
 
         ;
 
@@ -73,6 +75,16 @@ public class Server {
         LoginResult result=new LoginResult(auth.username(), auth.authToken());
         var jsonResult = serializer.toJson(result);
         ctx.json(jsonResult);
+    }
+
+    private void logoutUser(Context ctx) throws DataAccessException {
+      String authToken = ctx.header("Authorization");
+  if(authToken==null||authToken.isBlank()){
+      throw new DataAccessException(DataAccessException.Code.UNAUTHORIZED_ERROR,"Error: Invalid authToken");
+  }
+        //System.out.println(authToken);
+        authService.logout(authToken);
+        ctx.status(200);
     }
 
 
