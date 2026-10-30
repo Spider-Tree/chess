@@ -1,11 +1,9 @@
 package server;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import dataaccess.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import java.util.Map;
 import service.*;
 import model.*;
 
@@ -25,6 +23,7 @@ public class Server {
                 //.post("/user", this::addUser)
                 .delete("/db",this::clearAll)
                 .post("/user",this::addUser)
+                .exception(DataAccessException.class,this::errorHandler)
 
         ;
 
@@ -40,13 +39,13 @@ public class Server {
     public void stop() {
         javalin.stop();
     }
-    public void clearAll(Context ctx) throws DataAccessException{
+    private void clearAll(Context ctx) throws DataAccessException{
         authService.clear();
         userService.clear();
         gameService.clear();
         ctx.status(200);
     }
-    public void addUser(Context ctx) throws AlreadyTakenException, DataAccessException {
+    private void addUser(Context ctx) throws DataAccessException {
         UserData user = serializer.fromJson(ctx.body(),UserData.class);
 
         user = userService.addUser(user);
@@ -54,6 +53,9 @@ public class Server {
         RegisterResult result=new RegisterResult(user.username(), auth.authToken());
         var jsonResult = serializer.toJson(result);
         ctx.json(jsonResult);
+    }
+    private void errorHandler(DataAccessException ex, Context ctx){
+        ctx.status(ex.toHttpStatusCode());
     }
 
 

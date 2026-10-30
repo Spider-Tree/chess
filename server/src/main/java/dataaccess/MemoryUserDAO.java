@@ -10,9 +10,9 @@ public class MemoryUserDAO implements UserDAO{
     }
 
     @Override
-    public void createUser(UserData userdata) throws AlreadyTakenException {
+    public void createUser(UserData userdata) throws DataAccessException {
         if (null!=users.get(userdata.username())){
-            throw new AlreadyTakenException("Username already exists");
+            throw new DataAccessException(DataAccessException.Code.ALREADY_TAKEN_ERROR,"Username already exists");
         }
         users.put(userdata.username(),userdata);
     }

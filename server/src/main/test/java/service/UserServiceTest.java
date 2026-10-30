@@ -1,6 +1,5 @@
 package service;
 
-import dataaccess.AlreadyTakenException;
 import dataaccess.DataAccessException;
 import dataaccess.MemoryUserDAO;
 import dataaccess.UserDAO;
@@ -20,10 +19,15 @@ class UserServiceTest {
 
     }
     @BeforeEach
-    public void setup() throws DataAccessException, AlreadyTakenException {
+    public void setup() throws DataAccessException {
     testUserService.clear();
     testUserService.addUser(new UserData("testUser","123test","testingUser.gmail.com"));
     }
+    @Test
+    public void keepsDataStored(){
+        assertFalse(testUserService.getDataAccess().getMemory().isEmpty());
+    }
+
     @Test
     void clear() throws DataAccessException {
 
@@ -34,14 +38,19 @@ class UserServiceTest {
     }
 
     @Test
-    void addUser() {
+    void addUser() throws DataAccessException {
+        UserData tempUser=new UserData("Sam","123","sam@gmail.com");
+        testUserService.addUser(tempUser);
+        assertEquals(testUserService.getDataAccess().getUser("Sam"),tempUser);
+
     }
     @Test
     void alreadyTaken(){
 
-        assertThrows(AlreadyTakenException.class,() ->{
+        assertThrows(DataAccessException.class,() ->{
             testUserService.addUser(new UserData("Sam","123","sam@gmail.com"));
             testUserService.addUser(new UserData("Sam","123","sam@gmail.com"));
+
         });
     }
 }
