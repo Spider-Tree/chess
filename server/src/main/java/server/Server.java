@@ -47,7 +47,9 @@ public class Server {
     }
     private void addUser(Context ctx) throws DataAccessException {
         UserData user = serializer.fromJson(ctx.body(),UserData.class);
-
+        if (user==null||user.username()==null||user.password()==null||user.email()==null){
+            throw new DataAccessException(DataAccessException.Code.CLIENT_ERROR,"Error: Missing required data for registration");
+        }
         user = userService.addUser(user);
         AuthData auth=authService.createAuth(user.username());
         RegisterResult result=new RegisterResult(user.username(), auth.authToken());
@@ -56,6 +58,7 @@ public class Server {
     }
     private void errorHandler(DataAccessException ex, Context ctx){
         ctx.status(ex.toHttpStatusCode());
+        ctx.json(ex.toJson());
     }
 
 
