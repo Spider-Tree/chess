@@ -28,6 +28,7 @@ public class Server {
                 .post("/session",this::loginUser)
                 .delete("/session",this::logoutUser)
                 .get("/game",this::listGames)
+                .post("/game",this::createGame)
                 .exception(DataAccessException.class,this::errorHandler)
 
 
@@ -99,5 +100,20 @@ public class Server {
         ListGamesResult result = new ListGamesResult(games);
         var jsonResult=serializer.toJson(result);
         ctx.json(jsonResult);
+    }
+    private void createGame(Context ctx) throws DataAccessException {
+        String authToken=ctx.header("Authorization");
+        if(authToken==null||authToken.isBlank()||authService.getAuthData(authToken)==null){
+            throw new DataAccessException(DataAccessException.Code.UNAUTHORIZED_ERROR,"Error: unauthorized");
+        }
+        CreateGameRequest request=serializer.fromJson(ctx.body(),CreateGameRequest.class);
+        if (request.gameName()==null||request.gameName().isBlank()){
+            throw new DataAccessException(DataAccessException.Code.CLIENT_ERROR,"Error: invalid game name");
+        }
+        GameData game =gameService.createGame(request.gameName());
+        CreateGameResult result = new CreateGameResult(game.gameID());
+        var jsonResult=serializer.toJson(result);
+        ctx.json(jsonResult);
+
     }
 }

@@ -18,12 +18,12 @@ public class MemoryGameDAO implements GameDAO{
 
     @Override
     public GameData getGame(int ID) throws DataAccessException {
-        return null;
+        return games.get(ID);
     }
 
     @Override
-    public void createGame() throws DataAccessException {
-
+    public void createGame(GameData game) throws DataAccessException {
+        games.put(game.gameID(),game);
     }
 
     @Override
