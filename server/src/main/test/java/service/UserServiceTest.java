@@ -12,16 +12,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
     private static UserService testUserService;
+    private static UserData testUserData;
 
     @BeforeAll
     public static void init(){
         testUserService=new UserService(new MemoryUserDAO());
+        testUserData=new UserData("testUser","123test","testingUser@gmail.com");
 
     }
     @BeforeEach
     public void setup() throws DataAccessException {
     testUserService.clear();
-    testUserService.addUser(new UserData("testUser","123test","testingUser.gmail.com"));
+    testUserService.addUser(testUserData);
     }
     @Test
     public void keepsDataStored(){
@@ -52,5 +54,27 @@ class UserServiceTest {
             testUserService.addUser(new UserData("Sam","123","sam@gmail.com"));
 
         });
+
+    }
+    @Test
+    void loginUserExistingUser() throws DataAccessException {
+        assertEquals(testUserData,testUserService.loginUser(new LoginRequest(testUserData.username(),testUserData.password())));
+    }
+    @Test
+    void userDoesNotExist(){
+        assertThrows(DataAccessException.class,()->{
+            testUserService.clear();
+            testUserService.loginUser(new LoginRequest(testUserData.username(),testUserData.password()));
+        });
+    }
+    @Test
+    void wrongPassword(){
+        assertThrows(DataAccessException.class,()->{
+            testUserService.loginUser(new LoginRequest(testUserData.username(),"141949wrong"));
+        });
+    }
+    @Test
+    void alreadyLoggedIn(){
+
     }
 }

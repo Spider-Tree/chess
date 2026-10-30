@@ -32,4 +32,15 @@ public class MemoryAuthDAO implements AuthDAO{
     public HashMap<String,AuthData> getMemory(){
         return auths;
     }
+    @Override
+    public void updateAuth(AuthData auth) throws DataAccessException{
+        if(auths.get(auth.authToken())==null){
+            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR,"Error: Can't Update non-existent user");
+        }
+        auths.replace(auth.authToken(),auth);
+    };
+    @Override
+    public AuthData getAuthfromUsername(String username) throws DataAccessException{
+        return null;
+    };
 }
