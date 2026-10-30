@@ -24,4 +24,15 @@ public class UserService {
     public UserDAO getDataAccess(){
         return dataAccess;
     }
+
+    public UserData loginUser(LoginRequest request) throws DataAccessException {
+        UserData user =dataAccess.getUser(request.username());
+        if (user==null){
+            throw new DataAccessException(DataAccessException.Code.UNAUTHORIZED_ERROR,"Error: User does not exist");
+        }
+        if (!user.password().equals(request.password())){
+            throw new DataAccessException(DataAccessException.Code.UNAUTHORIZED_ERROR,"Error: Wrong Password");
+        }
+        return user;
+    }
 }

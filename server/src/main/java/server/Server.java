@@ -23,6 +23,7 @@ public class Server {
                 //.post("/user", this::addUser)
                 .delete("/db",this::clearAll)
                 .post("/user",this::addUser)
+                .post("/session",this::loginUser)
                 .exception(DataAccessException.class,this::errorHandler)
 
         ;
@@ -60,6 +61,18 @@ public class Server {
     private void errorHandler(DataAccessException ex, Context ctx){
         ctx.status(ex.toHttpStatusCode());
         ctx.json(ex.toJson());
+    }
+    private void loginUser(Context ctx) throws DataAccessException {
+        LoginRequest request = serializer.fromJson(ctx.body(),LoginRequest.class);
+        if(request==null||request.password()==null||request.username()==null){
+            throw new DataAccessException(DataAccessException.Code.CLIENT_ERROR,"Error: Missing password or username  for login");
+        }
+
+        UserData user =userService.loginUser(request);
+        AuthData auth = authService.createAuth(user.username());
+        LoginResult result=new LoginResult(auth.username(), auth.authToken());
+        var jsonResult = serializer.toJson(result);
+        ctx.json(jsonResult);
     }
 
 

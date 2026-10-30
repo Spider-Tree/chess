@@ -27,4 +27,5 @@ public class MemoryUserDAO implements UserDAO{
     public HashMap<String,UserData> getMemory(){
         return users;
     }
+
 }
