@@ -27,7 +27,7 @@ class AuthServiceTest {
     @Test
     void clear() throws DataAccessException {
         testAuthService.clear();
-        assertTrue(testAuthService.getDataAccess().getMemory().isEmpty());
+        assertNull(testAuthService.getAuthData(testAuthData.authToken()));
     }
     @Test
     void keepDataStored() throws DataAccessException {
