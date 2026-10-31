@@ -19,10 +19,10 @@ public class ChessBoard {
         this.board = board;
     }
 
-    public ChessBoard(ChessBoard CB) {
+    public ChessBoard(ChessBoard chessBoard) {
         ChessPiece[][] deepCopy = new ChessPiece[8][8];
         for (int x = 0; x < 8; x++) {
-            deepCopy[x] = Arrays.copyOf(CB.board[x], 8);
+            deepCopy[x] = Arrays.copyOf(chessBoard.board[x], 8);
         }
         this.board = deepCopy;
     }
@@ -99,19 +99,6 @@ public class ChessBoard {
         this.addPiece(new ChessPosition(8, 5), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING));
 
     }
-
-    /**
-     * Loops through each space and generates a visual representation of the chess board. Might be in CHessGame
-     */
-    public void displayBoard() {
-        for (int r = 0; r < this.board.length; r++) {
-            for (int c = 0; c < this.board[r].length; c++) {
-                ChessPosition P = new ChessPosition(r, c);
-                System.out.println(this.getPiece(P));
-            }
-        }
-    }
-
 
     @Override
     public boolean equals(Object o) {
