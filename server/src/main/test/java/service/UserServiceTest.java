@@ -34,25 +34,28 @@ class UserServiceTest {
     void clear() throws DataAccessException {
 
         testUserService.clear();
-        UserDAO testDAO=testUserService.getDataAccess();
-        assertTrue(testDAO.getMemory().isEmpty());
+        assertThrows(DataAccessException.class,()->{
+            testUserService.loginUser(new LoginRequest(testUserData.username(),testUserData.password()));
+        });
 
     }
 
     @Test
     void addUser() throws DataAccessException {
         UserData tempUser=new UserData("Sam","123","sam@gmail.com");
-        testUserService.addUser(tempUser);
-        assertEquals(testUserService.getDataAccess().getUser("Sam"),tempUser);
+        UserData result=testUserService.addUser(tempUser);
+        assertEquals(tempUser,result);
 
     }
     @Test
-    void alreadyTaken(){
+    void addMultipleUsers(){
 
+    }
+    @Test
+    void alreadyTaken() throws DataAccessException {
+            testUserService.addUser(new UserData("Sam","123","sam@gmail.com"));
         assertThrows(DataAccessException.class,() ->{
             testUserService.addUser(new UserData("Sam","123","sam@gmail.com"));
-            testUserService.addUser(new UserData("Sam","123","sam@gmail.com"));
-
         });
 
     }
@@ -69,12 +72,11 @@ class UserServiceTest {
     }
     @Test
     void wrongPassword(){
-        assertThrows(DataAccessException.class,()->{
+        DataAccessException exception=assertThrows(DataAccessException.class,()->{
             testUserService.loginUser(new LoginRequest(testUserData.username(),"141949wrong"));
         });
-    }
-    @Test
-    void alreadyLoggedIn(){
 
+        assertEquals(DataAccessException.Code.UNAUTHORIZED_ERROR,exception.getCode());
     }
+
 }

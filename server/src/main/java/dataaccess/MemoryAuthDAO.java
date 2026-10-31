@@ -1,7 +1,6 @@
 package dataaccess;
 
 import model.AuthData;
-import service.LogoutResult;
 
 import java.util.HashMap;
 

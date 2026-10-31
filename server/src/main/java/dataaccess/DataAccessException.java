@@ -43,5 +43,9 @@ public class DataAccessException extends Exception {
             case ALREADY_TAKEN_ERROR -> 403;
             case UNAUTHORIZED_ERROR -> 401;
         };
+
+    }
+    public Code getCode() {
+        return code;
     }
 }
