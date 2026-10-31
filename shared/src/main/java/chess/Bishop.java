@@ -21,8 +21,9 @@ public class Bishop {
 
     public void checkDiagonal(ChessBoard b, ChessPosition start, int directionR, int directionC) {
         ChessGame.TeamColor color = b.getPiece(start).getTeamColor();
-        for (int r = start.getRow() + directionR, c = start.getColumn() + directionC; c < 9 && r < 9 && 0 < r && 0 < c; c = directionC + c, r = directionR + r) {
-            //System.out.println(r+", "+ c);
+        for (int r = start.getRow() + directionR, c = start.getColumn() + directionC;
+             c < 9 && r < 9 && 0 < r && 0 < c
+                ; c += directionC, r = +directionR) {
 
             if (null == b.getPiece(new ChessPosition(r, c))) {
                 allPos.add(new ChessMove(start, new ChessPosition(r, c), null));

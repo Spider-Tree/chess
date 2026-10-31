@@ -37,16 +37,19 @@ public class ChessBoard {
         board[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
-    public void makeMove(ChessMove Move) {
-        if (Move.getPromotionPiece() == null) {
+    public void makeMove(ChessMove move) {
+        if (move.getPromotionPiece() == null) {
 
-            ChessPiece piece = this.getPiece(Move.getStartPosition());
-            this.addPiece(Move.getStartPosition(), null);
-            this.addPiece(Move.getEndPosition(), piece);
+            ChessPiece piece = this.getPiece(move.getStartPosition());
+            this.addPiece(move.getStartPosition(), null);
+            this.addPiece(move.getEndPosition(), piece);
         } else {
-            ChessPiece piece = new ChessPiece(this.getPiece(Move.getStartPosition()).getTeamColor(), Move.getPromotionPiece());
-            this.addPiece(Move.getStartPosition(), null);
-            this.addPiece(Move.getEndPosition(), piece);
+            ChessPiece piece =
+                    new ChessPiece(
+                            this.getPiece(move.getStartPosition()).getTeamColor(),
+                            move.getPromotionPiece());
+            this.addPiece(move.getStartPosition(), null);
+            this.addPiece(move.getEndPosition(), piece);
         }
     }
 
@@ -128,9 +131,9 @@ public class ChessBoard {
         for (int r = 1; r < (this.board.length) + 1; r++) {
             for (int c = 1; c < (this.board[r - 1].length + 1); c++) {
 
-                ChessPosition Pos = new ChessPosition(r, c);
-                if (this.getPiece(Pos) != null) {
-                    total += this.getPiece(Pos).hashCode();
+                ChessPosition position = new ChessPosition(r, c);
+                if (this.getPiece(position) != null) {
+                    total += this.getPiece(position).hashCode();
                 } else {
                     total += r + c;
                 }
