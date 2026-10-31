@@ -1,4 +1,5 @@
 package chess;
+
 /**
  * Represents moving a chess piece on a chessboard
  * <p>
@@ -6,14 +7,15 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessMove {
-    private ChessPosition start;
-    private ChessPosition end;
-    private ChessPiece.PieceType promotion;
+    private final ChessPosition start;
+    private final ChessPosition end;
+    private final ChessPiece.PieceType promotion;
+
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
-        this.start=startPosition;
-        this.end=endPosition;
-        this.promotion=promotionPiece;
+        this.start = startPosition;
+        this.end = endPosition;
+        this.promotion = promotionPiece;
     }
 
     /**
@@ -39,53 +41,55 @@ public class ChessMove {
     public ChessPiece.PieceType getPromotionPiece() {
         return promotion;
     }
+
     @Override
-    public boolean equals(Object obj){
-        if (this==obj){
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (!(obj instanceof ChessMove other)){
+        if (!(obj instanceof ChessMove other)) {
             return false;
         }
 
-        return start.equals(other.start)&& end.equals(other.end)&&promotion==other.promotion;
+        return start.equals(other.start) && end.equals(other.end) && promotion == other.promotion;
     }
+
     @Override
-    public int hashCode(){
-        int temp=10;
-    switch (promotion) {
-        case BISHOP:
-            temp=1;
-            break;
-        case KNIGHT:
-            temp=2;
-            break;
-        case KING:
-            System.out.println("Error can't promote to king");
-            break;
-        case QUEEN:
-            temp=3;
-            break;
-        case ROOK:
-            temp=4;
-            break;
-        case null:
-            temp=0;
-            break;
-        case PAWN:
-            System.out.println("Error: can't promote to pawn");
-            break;
+    public int hashCode() {
+        int temp = 10;
+        switch (promotion) {
+            case BISHOP:
+                temp = 1;
+                break;
+            case KNIGHT:
+                temp = 2;
+                break;
+            case KING:
+                System.out.println("Error can't promote to king");
+                break;
+            case QUEEN:
+                temp = 3;
+                break;
+            case ROOK:
+                temp = 4;
+                break;
+            case null:
+                temp = 0;
+                break;
+            case PAWN:
+                System.out.println("Error: can't promote to pawn");
+                break;
+        }
+        return 47 * (3 * end.getRow() + 10 * end.getColumn() + 2 * start.getRow() + start.getColumn() + temp);
     }
-        return 47 * (3*end.getRow()+10*end.getColumn()+2*start.getRow()+start.getColumn()+temp);
-    }
+
     @Override
-    public String toString(){
-        if (promotion==null) {
+    public String toString() {
+        if (promotion == null) {
             return "Start: " + start + ", End: " + end + ", will NOT promote";
+        } else {
+            return "Start: " + start + ", End: " + end + ", will promote";
         }
-        else{
-            return "Start: " + start+ ", End: " + end + ", will promote";
-        }
-        }
+    }
 
 }

@@ -15,68 +15,75 @@ class UserServiceTest {
     private static UserData testUserData;
 
     @BeforeAll
-    public static void init(){
-        testUserService=new UserService(new MemoryUserDAO());
-        testUserData=new UserData("testUser","123test","testingUser@gmail.com");
+    public static void init() {
+        testUserService = new UserService(new MemoryUserDAO());
+        testUserData = new UserData("testUser", "123test", "testingUser@gmail.com");
 
     }
+
     @BeforeEach
     public void setup() throws DataAccessException {
-    testUserService.clear();
-    testUserService.addUser(testUserData);
+        testUserService.clear();
+        testUserService.addUser(testUserData);
     }
+
     @Test
-    public void keepsDataStored(){
-        assertFalse(testUserService.getDataAccess().getMemory().isEmpty());
+    public void keepsDataStored() {
+        assertFalse(testUserService.dataAccess().getMemory().isEmpty());
     }
 
     @Test
     void clear() throws DataAccessException {
 
         testUserService.clear();
-        assertThrows(DataAccessException.class,()->{
-            testUserService.loginUser(new LoginRequest(testUserData.username(),testUserData.password()));
+        assertThrows(DataAccessException.class, () -> {
+            testUserService.loginUser(new LoginRequest(testUserData.username(), testUserData.password()));
         });
 
     }
 
     @Test
     void addUser() throws DataAccessException {
-        UserData tempUser=new UserData("Sam","123","sam@gmail.com");
-        UserData result=testUserService.addUser(tempUser);
-        assertEquals(tempUser,result);
+        UserData tempUser = new UserData("Sam", "123", "sam@gmail.com");
+        UserData result = testUserService.addUser(tempUser);
+        assertEquals(tempUser, result);
 
     }
+
     @Test
-    void addMultipleUsers(){
+    void addMultipleUsers() {
 
     }
+
     @Test
     void alreadyTaken() throws DataAccessException {
-            testUserService.addUser(new UserData("Sam","123","sam@gmail.com"));
-        assertThrows(DataAccessException.class,() ->{
-            testUserService.addUser(new UserData("Sam","123","sam@gmail.com"));
+        testUserService.addUser(new UserData("Sam", "123", "sam@gmail.com"));
+        assertThrows(DataAccessException.class, () -> {
+            testUserService.addUser(new UserData("Sam", "123", "sam@gmail.com"));
         });
 
     }
+
     @Test
     void loginUserExistingUser() throws DataAccessException {
-        assertEquals(testUserData,testUserService.loginUser(new LoginRequest(testUserData.username(),testUserData.password())));
+        assertEquals(testUserData, testUserService.loginUser(new LoginRequest(testUserData.username(), testUserData.password())));
     }
+
     @Test
-    void userDoesNotExist(){
-        assertThrows(DataAccessException.class,()->{
+    void userDoesNotExist() {
+        assertThrows(DataAccessException.class, () -> {
             testUserService.clear();
-            testUserService.loginUser(new LoginRequest(testUserData.username(),testUserData.password()));
+            testUserService.loginUser(new LoginRequest(testUserData.username(), testUserData.password()));
         });
     }
+
     @Test
-    void wrongPassword(){
-        DataAccessException exception=assertThrows(DataAccessException.class,()->{
-            testUserService.loginUser(new LoginRequest(testUserData.username(),"141949wrong"));
+    void wrongPassword() {
+        DataAccessException exception = assertThrows(DataAccessException.class, () -> {
+            testUserService.loginUser(new LoginRequest(testUserData.username(), "141949wrong"));
         });
 
-        assertEquals(DataAccessException.Code.UNAUTHORIZED_ERROR,exception.getCode());
+        assertEquals(DataAccessException.Code.UNAUTHORIZED_ERROR, exception.getCode());
     }
 
 }

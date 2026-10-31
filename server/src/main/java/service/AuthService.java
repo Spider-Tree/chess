@@ -3,36 +3,35 @@ package service;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import model.AuthData;
+
 import java.util.UUID;
 
-public class AuthService {
-    private final AuthDAO dataAccess;
-    public AuthService(AuthDAO dataAccess){
-        this.dataAccess=dataAccess;
-    }
+public record AuthService(AuthDAO dataAccess) {
+
     public void clear() throws DataAccessException {
         dataAccess.clear();
 
     }
+
     public AuthData createAuth(String username) throws DataAccessException {
 
-        String authToken= UUID.randomUUID().toString();
-        dataAccess.createAuth(new AuthData(authToken,username));
+        String authToken = UUID.randomUUID().toString();
+        dataAccess.createAuth(new AuthData(authToken, username));
         return dataAccess.getAuth(authToken);
     }
-    public void addAuth(AuthData auth) throws DataAccessException{
+
+    public void addAuth(AuthData auth) throws DataAccessException {
         dataAccess.createAuth(auth);
     }
+
     public AuthData getAuthData(String authToken) throws DataAccessException {
         return dataAccess.getAuth(authToken);
     }
-    public AuthDAO getDataAccess(){
-        return dataAccess;
-    }
+
     public void logout(String token) throws DataAccessException {
-        AuthData auth =dataAccess.getAuth(token);
-        if(auth==null){
-            throw new DataAccessException(DataAccessException.Code.UNAUTHORIZED_ERROR,"Error: unauthorized");
+        AuthData auth = dataAccess.getAuth(token);
+        if (auth == null) {
+            throw new DataAccessException(DataAccessException.Code.UNAUTHORIZED_ERROR, "Error: unauthorized");
         }
         dataAccess.deleteAuth(token);
     }

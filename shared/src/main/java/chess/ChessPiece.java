@@ -9,8 +9,8 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessPiece {
-    private ChessGame.TeamColor color;
-    private ChessPiece.PieceType type;
+    private final ChessGame.TeamColor color;
+    private final ChessPiece.PieceType type;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.color = pieceColor;
@@ -51,107 +51,92 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        if (this.type==PieceType.BISHOP){
-            Bishop o=new Bishop();
-            return o.pieceMoveBishop(board,myPosition);
-        }
-        else if (this.type==PieceType.ROOK){
-            Rook o=new Rook();
-            return o.pieceMoveRook(board,myPosition);
-        }
-        else if (this.type==PieceType.KING){
-            King o= new King();
-            return o.pieceMoveKing(board,myPosition);
-        }
-        else if (this.type==PieceType.PAWN){
-            Pawn o=new Pawn();
-            return o.pieceMovePawn(board,myPosition);
-        }
-        else if (this.type==PieceType.QUEEN){
-            Queen o= new Queen();
-            return o.pieceMoveQueen(board,myPosition);
-        }
-        else if (this.type==PieceType.KNIGHT){
-            Knight o=new Knight();
-            return o.pieceMoveKnight(board,myPosition);
+        if (this.type == PieceType.BISHOP) {
+            Bishop o = new Bishop();
+            return o.pieceMoveBishop(board, myPosition);
+        } else if (this.type == PieceType.ROOK) {
+            Rook o = new Rook();
+            return o.pieceMoveRook(board, myPosition);
+        } else if (this.type == PieceType.KING) {
+            King o = new King();
+            return o.pieceMoveKing(board, myPosition);
+        } else if (this.type == PieceType.PAWN) {
+            Pawn o = new Pawn();
+            return o.pieceMovePawn(board, myPosition);
+        } else if (this.type == PieceType.QUEEN) {
+            Queen o = new Queen();
+            return o.pieceMoveQueen(board, myPosition);
+        } else if (this.type == PieceType.KNIGHT) {
+            Knight o = new Knight();
+            return o.pieceMoveKnight(board, myPosition);
         }
         return null;
     }
 
     /// Help with debugging this won't work need to toString the ENUMs
     public String toString() {
-        String s="error";
-        if (this.type==PieceType.BISHOP){
-            s="b";
+        String s = "error";
+        if (this.type == PieceType.BISHOP) {
+            s = "b";
+        } else if (this.type == PieceType.ROOK) {
+            s = "r";
+        } else if (this.type == PieceType.KING) {
+            s = "k";
+        } else if (this.type == PieceType.PAWN) {
+            s = "p";
+        } else if (this.type == PieceType.QUEEN) {
+            s = "q";
+        } else if (this.type == PieceType.KNIGHT) {
+            s = "n";
         }
-        else if (this.type==PieceType.ROOK){
-            s="r";
-        }
-        else if (this.type==PieceType.KING){
-            s="k";
-        }
-        else if (this.type==PieceType.PAWN){
-            s="p";
-        }
-        else if (this.type==PieceType.QUEEN){
-            s="q";
-        }
-        else if (this.type==PieceType.KNIGHT){
-            s="n";
-        }
-        if (this.color== ChessGame.TeamColor.WHITE){
+        if (this.color == ChessGame.TeamColor.WHITE) {
             return s.toUpperCase();
-        }
-        else{
+        } else {
             return s;
         }
 
     }
+
     @Override
-    public boolean equals(Object o){
-        if (this==o) return true;
-        if (o==null||this.getClass()!=o.getClass()) return false;
-        ChessPiece other=(ChessPiece) o;
-        if (other.getTeamColor()==this.color&&other.getPieceType()==this.type){return true;}
-        else{return false;}
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
+        ChessPiece other = (ChessPiece) o;
+        return other.getTeamColor() == this.color && other.getPieceType() == this.type;
     }
+
     @Override
-    public int hashCode(){
-        int temp=10;
-        if(this.color==ChessGame.TeamColor.WHITE){
-            if (this.type==PieceType.BISHOP){
-                return 12*temp+3;
-            }
-            else if (this.type==PieceType.ROOK){
-                return 11*temp+2;
-            }
-            else if (this.type==PieceType.KING){
-                return 10*temp+4;
-            }
-            else if (this.type==PieceType.PAWN){
-                return 9*temp+3;
-            }
-            else if (this.type==PieceType.QUEEN){
-                return 8*temp+5;
+    public int hashCode() {
+        int temp = 10;
+        if (this.color == ChessGame.TeamColor.WHITE) {
+            if (this.type == PieceType.BISHOP) {
+                return 12 * temp + 3;
+            } else if (this.type == PieceType.ROOK) {
+                return 11 * temp + 2;
+            } else if (this.type == PieceType.KING) {
+                return 10 * temp + 4;
+            } else if (this.type == PieceType.PAWN) {
+                return 9 * temp + 3;
+            } else if (this.type == PieceType.QUEEN) {
+                return 8 * temp + 5;
             }
 
-        }
-        else{
-            temp=12;
-            if (this.type==PieceType.BISHOP){
-                return 12*temp+3;
-            }
-            else if (this.type==PieceType.ROOK){
-                return 11*temp+2;
-            }
-            else if (this.type==PieceType.KING){
-                return 10*temp+4;
-            }
-            else if (this.type==PieceType.PAWN){
-                return 9*temp+3;
-            }
-            else if (this.type==PieceType.QUEEN){
-                return 8*temp+5;
+        } else {
+            temp = 12;
+            if (this.type == PieceType.BISHOP) {
+                return 12 * temp + 3;
+            } else if (this.type == PieceType.ROOK) {
+                return 11 * temp + 2;
+            } else if (this.type == PieceType.KING) {
+                return 10 * temp + 4;
+            } else if (this.type == PieceType.PAWN) {
+                return 9 * temp + 3;
+            } else if (this.type == PieceType.QUEEN) {
+                return 8 * temp + 5;
             }
         }
 
