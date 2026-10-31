@@ -1,7 +1,6 @@
 package dataaccess;
-import chess.ChessGame;
 import model.*;
-import service.*;
+import server.JoinGameRequest;
 
 import java.util.Collection;
 

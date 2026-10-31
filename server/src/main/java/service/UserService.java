@@ -2,6 +2,7 @@ package service;
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
 import model.UserData;
+import server.LoginRequest;
 
 //import java.util.Collection;
 public class UserService {

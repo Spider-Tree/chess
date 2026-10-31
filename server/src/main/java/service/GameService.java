@@ -3,8 +3,8 @@ package service;
 import chess.ChessGame;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
-import dataaccess.UserDAO;
 import model.GameData;
+import server.JoinGameRequest;
 
 import java.util.Collection;
 import java.util.Random;
@@ -29,6 +29,9 @@ public class GameService {
         dataAccess.createGame(new GameData(gameID,null,null,gameName,new ChessGame()));
         return dataAccess.getGame(gameID);
 
+    }
+    public void addGame(GameData data) throws DataAccessException {
+        dataAccess.createGame(data);
     }
     public GameData getGame(int gameID) throws DataAccessException {
         return dataAccess.getGame(gameID);

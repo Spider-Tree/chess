@@ -2,9 +2,7 @@ package dataaccess;
 
 import chess.ChessGame;
 import model.GameData;
-import model.UserData;
-import service.JoinGameRequest;
-import service.ListGamesResult;
+import server.JoinGameRequest;
 
 import java.util.ArrayList;
 import java.util.Collection;

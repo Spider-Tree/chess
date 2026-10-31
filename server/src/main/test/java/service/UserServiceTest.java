@@ -2,11 +2,11 @@ package service;
 
 import dataaccess.DataAccessException;
 import dataaccess.MemoryUserDAO;
-import dataaccess.UserDAO;
 import model.UserData;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import server.LoginRequest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
