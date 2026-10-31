@@ -4,15 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Pawn {
-    ArrayList<ChessMove> allPos = new ArrayList<>();
-
-    public Pawn() {
-    }
+    private final ArrayList<ChessMove> allPos = new ArrayList<>();
 
     public Collection<ChessMove> pieceMovePawn(ChessBoard board, ChessPosition myPosition) {
-        ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
-        //check color
-        if (color == ChessGame.TeamColor.WHITE) {
+        if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
             moveLogicWhite(board, myPosition);
         } else {
             moveLogicBlack(board, myPosition);
@@ -20,116 +15,58 @@ public class Pawn {
         return allPos;
     }
 
-    public void moveLogicWhite(ChessBoard b, ChessPosition start) {
-        int row = start.getRow();
-        int col = start.getColumn();
-        //first check in front, then check diagonals
-        if (row == 2) {
-            for (int x = 1; x < 3; x++) {
-                if (null == b.getPiece(new ChessPosition(row + x, col))) {
-                    allPos.add(new ChessMove(start, new ChessPosition(row + x, col), null));
-                } else {
-                    x = 10;
-                }
-            }
-        } else if (row == 7) {
-            //defaults to Queen add input later
-            if (null == b.getPiece(new ChessPosition(row + 1, col))) {
-                allPos.add(new ChessMove(start, new ChessPosition(row + 1, col), ChessPiece.PieceType.QUEEN));
-                allPos.add(new ChessMove(start, new ChessPosition(row + 1, col), ChessPiece.PieceType.KNIGHT));
-                allPos.add(new ChessMove(start, new ChessPosition(row + 1, col), ChessPiece.PieceType.BISHOP));
-                allPos.add(new ChessMove(start, new ChessPosition(row + 1, col), ChessPiece.PieceType.ROOK));
-            }
-        } else {
-            if (null == b.getPiece(new ChessPosition(row + 1, col))) {
-                allPos.add(new ChessMove(start, new ChessPosition(row + 1, col), null));
-            }
-        }
-
-        if (row == 7) {
-            for (int c = -1; c < 2; c += 2) {
-                //System.out.println(c);
-                if (0 < col + c && col + c < 9) {
-                    if (null != b.getPiece(new ChessPosition(row + 1, col + c))) {
-                        System.out.println(new ChessPosition(row + 1, col + c));
-                        if (ChessGame.TeamColor.BLACK == b.getPiece(new ChessPosition(row + 1, col + c)).getTeamColor()) {
-                            // System.out.println(col);
-                            //System.out.println(c);
-                            //System.out.println(col+c);
-                            allPos.add(new ChessMove(start, new ChessPosition(row + 1, col + c), ChessPiece.PieceType.QUEEN));
-                            allPos.add(new ChessMove(start, new ChessPosition(row + 1, col + c), ChessPiece.PieceType.KNIGHT));
-                            allPos.add(new ChessMove(start, new ChessPosition(row + 1, col + c), ChessPiece.PieceType.BISHOP));
-                            allPos.add(new ChessMove(start, new ChessPosition(row + 1, col + c), ChessPiece.PieceType.ROOK));
-                        }
-                    }
-                }
-            }
-        } else {
-            for (int c = -1; c < 2; c += 2) {
-                if (0 < col + c && col + c < 9) {
-                    if (null != b.getPiece(new ChessPosition(row + 1, col + c))) {
-                        if (ChessGame.TeamColor.BLACK == b.getPiece(new ChessPosition(row + 1, col + c)).getTeamColor()) {
-                            allPos.add(new ChessMove(start, new ChessPosition(row + 1, col + c), null));
-                        }
-                    }
-                }
-            }
-        }
-
-
+    public void moveLogicWhite(ChessBoard board, ChessPosition start) {
+        addPawnMoves(board, start, ChessGame.TeamColor.WHITE, 1, 2, 7);
     }
 
-    public void moveLogicBlack(ChessBoard b, ChessPosition start) {
+    public void moveLogicBlack(ChessBoard board, ChessPosition start) {
+        addPawnMoves(board, start, ChessGame.TeamColor.BLACK, -1, 7, 2);
+    }
+
+    private void addPawnMoves(
+            ChessBoard board,
+            ChessPosition start,
+            ChessGame.TeamColor color,
+            int direction,
+            int startingRow,
+            int promotionRow) {
         int row = start.getRow();
-        int col = start.getColumn();
-        //first check in front, then check diagonals
-        if (row == 7) {
-            for (int x = 1; x < 3; x++) {
-                if (null == b.getPiece(new ChessPosition(row - x, col))) {
-                    allPos.add(new ChessMove(start, new ChessPosition(row - x, col), null));
-                } else {
-                    x = 10;
-                }
+        int column = start.getColumn();
+        int distance = row == startingRow ? 2 : 1;
+        boolean promotes = row == promotionRow;
+
+        for (int step = 1; step <= distance; step++) {
+            ChessPosition end = new ChessPosition(row + direction * step, column);
+            if (board.getPiece(end) != null) {
+                break;
             }
-        } else if (row == 2) {
-            //defaults to Queen add input later
-            if (null == b.getPiece(new ChessPosition(row - 1, col))) {
-                allPos.add(new ChessMove(start, new ChessPosition(row - 1, col), ChessPiece.PieceType.QUEEN));
-                allPos.add(new ChessMove(start, new ChessPosition(row - 1, col), ChessPiece.PieceType.KNIGHT));
-                allPos.add(new ChessMove(start, new ChessPosition(row - 1, col), ChessPiece.PieceType.BISHOP));
-                allPos.add(new ChessMove(start, new ChessPosition(row - 1, col), ChessPiece.PieceType.ROOK));
-            }
-        } else {
-            if (null == b.getPiece(new ChessPosition(row - 1, col))) {
-                allPos.add(new ChessMove(start, new ChessPosition(row - 1, col), null));
-            }
+            addMove(start, end, promotes);
         }
 
-        if (row == 2) {
-            for (int c = -1; c < 2; c += 2) {
-                if (0 < col + c && col + c < 9) {
-                    if (null != b.getPiece(new ChessPosition(row - 1, col + c))) {
-
-                        if (ChessGame.TeamColor.WHITE == b.getPiece(new ChessPosition(row - 1, col + c)).getTeamColor()) {
-                            allPos.add(new ChessMove(start, new ChessPosition(row - 1, col + c), ChessPiece.PieceType.QUEEN));
-                            allPos.add(new ChessMove(start, new ChessPosition(row - 1, col + c), ChessPiece.PieceType.KNIGHT));
-                            allPos.add(new ChessMove(start, new ChessPosition(row - 1, col + c), ChessPiece.PieceType.BISHOP));
-                            allPos.add(new ChessMove(start, new ChessPosition(row - 1, col + c), ChessPiece.PieceType.ROOK));
-
-                        }
-                    }
-                }
+        for (int offset = -1; offset <= 1; offset += 2) {
+            int targetColumn = column + offset;
+            if (targetColumn < 1 || targetColumn > 8) {
+                continue;
             }
-        } else {
-            for (int c = -1; c < 2; c += 2) {
-                if (0 < col + c && col + c < 9) {
-                    if (null != b.getPiece(new ChessPosition(row - 1, col + c))) {
-                        if (ChessGame.TeamColor.WHITE == b.getPiece(new ChessPosition(row - 1, col + c)).getTeamColor()) {
-                            allPos.add(new ChessMove(start, new ChessPosition(row - 1, col + c), null));
-                        }
-                    }
-                }
+            ChessPosition end = new ChessPosition(row + direction, targetColumn);
+            ChessPiece target = board.getPiece(end);
+            if (target != null && target.getTeamColor() != color) {
+                addMove(start, end, promotes);
             }
+        }
+    }
+
+    private void addMove(ChessPosition start, ChessPosition end, boolean promotes) {
+        if (!promotes) {
+            allPos.add(new ChessMove(start, end, null));
+            return;
+        }
+        for (ChessPiece.PieceType promotion :
+                new ChessPiece.PieceType[] {
+                        ChessPiece.PieceType.QUEEN, ChessPiece.PieceType.KNIGHT,
+                        ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.ROOK
+                }) {
+            allPos.add(new ChessMove(start, end, promotion));
         }
     }
 }
