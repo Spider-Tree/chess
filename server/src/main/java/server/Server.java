@@ -1,5 +1,6 @@
 package server;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import dataaccess.*;
 import io.javalin.Javalin;
@@ -29,7 +30,9 @@ public class Server {
                 .delete("/session",this::logoutUser)
                 .get("/game",this::listGames)
                 .post("/game",this::createGame)
+                .put("/game",this::joinGame)
                 .exception(DataAccessException.class,this::errorHandler)
+
 
 
         ;
@@ -114,6 +117,35 @@ public class Server {
         CreateGameResult result = new CreateGameResult(game.gameID());
         var jsonResult=serializer.toJson(result);
         ctx.json(jsonResult);
+
+    }
+    private void joinGame(Context ctx) throws DataAccessException{
+        String authToken=ctx.header("Authorization");
+        AuthData auth=authService.getAuthData(authToken);
+        if(authToken==null||authToken.isBlank()||auth==null){
+            throw new DataAccessException(DataAccessException.Code.UNAUTHORIZED_ERROR,"Error: unauthorized");
+        }
+        JoinGameData data=serializer.fromJson(ctx.body(),JoinGameData.class);
+        if(gameService.getGame(data.gameID())==null){
+            throw new DataAccessException(DataAccessException.Code.CLIENT_ERROR,"Error: bad request");
+        }
+        ChessGame.TeamColor color;
+        if(data.playerColor()==null){
+            throw new DataAccessException(DataAccessException.Code.CLIENT_ERROR,"Error: bad request");
+        }
+        if(data.playerColor().equals("WHITE")){
+             color= ChessGame.TeamColor.WHITE;
+        } else if (data.playerColor().equals("BLACK")) {
+            color= ChessGame.TeamColor.BLACK;
+        }
+        else{
+            throw new DataAccessException(DataAccessException.Code.CLIENT_ERROR,"Error: bad request");
+        }
+
+        String username=auth.username();
+        JoinGameRequest request=new JoinGameRequest(color,data.gameID(),username);
+        gameService.joinGame(request);
+        ctx.status(200);
 
     }
 }

@@ -1,7 +1,9 @@
 package dataaccess;
 
+import chess.ChessGame;
 import model.GameData;
 import model.UserData;
+import service.JoinGameRequest;
 import service.ListGamesResult;
 
 import java.util.ArrayList;
@@ -37,4 +39,17 @@ public class MemoryGameDAO implements GameDAO{
     public void updateGame(int ID) throws DataAccessException {
 
     }
+    @Override
+    public void joinGame(JoinGameRequest request) throws DataAccessException{
+            GameData game =games.get(request.gameID());
+            if(request.color()==ChessGame.TeamColor.WHITE){
+            GameData updated=new GameData(request.gameID(), request.username(), game.blackUsername(),game.gameName(),game.game());
+                games.replace(request.gameID(), updated);
+            }
+            else {
+                GameData updated = new GameData(request.gameID(), game.whiteUsername(), request.username(), game.gameName(), game.game());
+                games.replace(request.gameID(), updated);
+            }
+
+    };
 }

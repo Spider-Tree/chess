@@ -1,4 +1,5 @@
 package dataaccess;
+import chess.ChessGame;
 import model.*;
 import java.util.HashMap;
 public class MemoryUserDAO implements UserDAO{
@@ -27,5 +28,6 @@ public class MemoryUserDAO implements UserDAO{
     public HashMap<String,UserData> getMemory(){
         return users;
     }
+
 
 }

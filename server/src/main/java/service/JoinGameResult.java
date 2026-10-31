@@ -1,4 +1,6 @@
 package service;
 
-public class JoinGameResult {
+import chess.ChessGame;
+
+public record JoinGameResult() {
 }

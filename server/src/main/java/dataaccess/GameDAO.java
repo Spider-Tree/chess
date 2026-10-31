@@ -1,4 +1,5 @@
 package dataaccess;
+import chess.ChessGame;
 import model.*;
 import service.*;
 
@@ -10,4 +11,5 @@ public interface GameDAO {
     void createGame(GameData game) throws DataAccessException;
     Collection<GameData> listGames() throws DataAccessException;
     void updateGame(int ID) throws DataAccessException;
+    void joinGame(JoinGameRequest request) throws DataAccessException;
 }
