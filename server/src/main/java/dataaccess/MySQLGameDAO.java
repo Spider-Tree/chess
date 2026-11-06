@@ -72,7 +72,27 @@ public class MySQLGameDAO implements GameDAO{
 
     @Override
     public void joinGame(JoinGameRequest request) throws DataAccessException {
-
+        GameData game = getGame(request.gameID());
+        var statement = "UPDATE game SET chessGame = ? WHERE gameID = ?";
+        if (request.color() == ChessGame.TeamColor.WHITE) {
+            GameData updated =
+                    new GameData(
+                            request.gameID(),
+                            request.username(),
+                            game.blackUsername(),
+                            game.gameName(),
+                            game.game());
+            executeUpdate(statement,new Gson().toJson(updated),request.gameID());
+        } else {
+            GameData updated =
+                    new GameData(
+                            request.gameID(),
+                            game.whiteUsername(),
+                            request.username(),
+                            game.gameName(),
+                            game.game());
+            executeUpdate(statement,new Gson().toJson(updated),request.gameID());
+        }
     }
     private GameData readGame(ResultSet rs) throws SQLException{
         var id = rs.getInt("gameID");
