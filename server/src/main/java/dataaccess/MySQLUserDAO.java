@@ -13,7 +13,7 @@ import static java.sql.Types.NULL;
 
 public class MySQLUserDAO implements UserDAO{
     public MySQLUserDAO() throws DataAccessException{
-        configureDatabase();
+        configureUserDatabase();
     }
     @Override
     public void clear() throws DataAccessException {
@@ -31,7 +31,7 @@ public class MySQLUserDAO implements UserDAO{
     @Override
     public UserData getUser(String username) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()){
-            var statement = "SELECT username, json FROM user WHERE username=?";
+            var statement = "SELECT username, userData FROM user WHERE username=?";
             try (PreparedStatement ps = conn.prepareStatement(statement)){
                 ps.setString(1,username);
                 try (ResultSet rs = ps.executeQuery()){
@@ -47,7 +47,6 @@ public class MySQLUserDAO implements UserDAO{
     }
 
     private UserData readUser(ResultSet rs) throws SQLException {
-        var user = rs.getString("username");
         var json = rs.getString("userData");
         UserData userData = new Gson().fromJson(json, UserData.class);
         return userData;
@@ -58,7 +57,7 @@ public class MySQLUserDAO implements UserDAO{
         return null;
     }
 
-    private int executeUpdate(String statement, Object... params) throws DataAccessException {
+    private void executeUpdate(String statement, Object... params) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             try (PreparedStatement ps = conn.prepareStatement(statement)) {
                 for (int i = 0; i < params.length; i++) {
@@ -71,7 +70,7 @@ public class MySQLUserDAO implements UserDAO{
                         ps.setNull(i + 1, NULL);
                     }
                 }
-                return ps.executeUpdate();
+                ps.executeUpdate();
 
 
             }
@@ -89,7 +88,7 @@ public class MySQLUserDAO implements UserDAO{
             """
     };
 
-    private void configureDatabase() throws DataAccessException {
+    private void configureUserDatabase() throws DataAccessException {
         DatabaseManager.createDatabase();
         try (Connection conn = DatabaseManager.getConnection()) {
             for (String statement : createStatements) {

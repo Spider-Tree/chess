@@ -15,7 +15,7 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 public class MySQLGameDAO implements GameDAO {
     public MySQLGameDAO() throws DataAccessException {
-        configureDatabase();
+        configureGameDatabase();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class MySQLGameDAO implements GameDAO {
     @Override
     public GameData getGame(int gameId) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT gameID, json FROM game WHERE gameID=?";
+            var statement = "SELECT gameID, gameData FROM game WHERE gameID=?";
             try (PreparedStatement ps = conn.prepareStatement(statement)) {
                 ps.setInt(1, gameId);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -96,7 +96,6 @@ public class MySQLGameDAO implements GameDAO {
     }
 
     private GameData readGame(ResultSet rs) throws SQLException {
-        var id = rs.getInt("gameID");
         var json = rs.getString("gameData");
         GameData game = new Gson().fromJson(json, GameData.class);
         return game;
@@ -134,12 +133,12 @@ public class MySQLGameDAO implements GameDAO {
             CREATE TABLE IF NOT EXISTS game (
               `gameID` int NOT NULL,
               `gameData` JSON NOT NULL,
-              PRIMARY KEY (`gameID`),
+              PRIMARY KEY (`gameID`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };
 
-    private void configureDatabase() throws DataAccessException {
+    private void configureGameDatabase() throws DataAccessException {
         DatabaseManager.createDatabase();
         try (Connection conn = DatabaseManager.getConnection()) {
             for (String statement : createStatements) {
