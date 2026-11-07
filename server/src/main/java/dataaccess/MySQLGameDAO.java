@@ -36,10 +36,10 @@ public class MySQLGameDAO implements GameDAO {
                     }
                 }
             } catch (Exception e) {
-                throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Unable to read data");
+                throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to read data");
             }
         } catch (SQLException e) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Unable to connect");
+            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to connect");
         }
         return null;
     }
@@ -56,7 +56,7 @@ public class MySQLGameDAO implements GameDAO {
     public Collection<GameData> listGames() throws DataAccessException {
         ArrayList<GameData> total = new ArrayList<>();
         try (Connection conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT gameID, json FROM game";
+            var statement = "SELECT gameID, gameData FROM game";
             try (PreparedStatement ps = conn.prepareStatement(statement)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -65,7 +65,7 @@ public class MySQLGameDAO implements GameDAO {
                 }
             }
         } catch (Exception e) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Unable to read games");
+            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to read games");
         }
         return total;
     }
@@ -124,7 +124,7 @@ public class MySQLGameDAO implements GameDAO {
                 return 0;
             }
         } catch (SQLException e) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Unable to update database");
+            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to update database");
         }
     }
 
@@ -147,7 +147,7 @@ public class MySQLGameDAO implements GameDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Unable to configure database");
+            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to configure database");
         }
     }
 }

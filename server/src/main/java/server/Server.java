@@ -19,9 +19,14 @@ public class Server {
     private final Gson serializer = new Gson();
 
     public Server() {
-        userService = new UserService(new MemoryUserDAO());
-        gameService = new GameService(new MemoryGameDAO());
-        authService = new AuthService(new MemoryAuthDAO());
+        try {
+            userService = new UserService(new MySQLUserDAO());
+            gameService = new GameService(new MySQLGameDAO());
+            authService = new AuthService(new MySQLAuthDAO());
+        } catch (DataAccessException e){
+            throw new RuntimeException("Error: Unable to initialize database", e);
+        }
+
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"))
                 //.post("/user", this::addUser)
@@ -78,7 +83,7 @@ public class Server {
     private void loginUser(Context ctx) throws DataAccessException {
         LoginRequest request = serializer.fromJson(ctx.body(), LoginRequest.class);
         if (request == null || request.password() == null || request.username() == null) {
-            throw new DataAccessException(DataAccessException.Code.CLIENT_ERROR, "Error: Missing password or username  for login");
+            throw new DataAccessException(DataAccessException.Code.CLIENT_ERROR, "Error: Missing password or username for login");
         }
 
         UserData user = userService.loginUser(request);

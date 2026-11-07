@@ -11,10 +11,11 @@ import java.util.HashMap;
 
 import static java.sql.Types.NULL;
 
-public class MySQLUserDAO implements UserDAO{
-    public MySQLUserDAO() throws DataAccessException{
+public class MySQLUserDAO implements UserDAO {
+    public MySQLUserDAO() throws DataAccessException {
         configureUserDatabase();
     }
+
     @Override
     public void clear() throws DataAccessException {
         var statement = "TRUNCATE user";
@@ -23,6 +24,9 @@ public class MySQLUserDAO implements UserDAO{
 
     @Override
     public void createUser(UserData userdata) throws DataAccessException {
+        if (getUser(userdata.username())!=null){
+            throw new DataAccessException(DataAccessException.Code.ALREADY_TAKEN_ERROR, "Error: Username already taken");
+        }
         var statement = "INSERT INTO user (username, userData) VALUES (?, ?)";
         String json = new Gson().toJson(userdata);
         executeUpdate(statement, userdata.username(), json);
@@ -30,18 +34,18 @@ public class MySQLUserDAO implements UserDAO{
 
     @Override
     public UserData getUser(String username) throws DataAccessException {
-        try (Connection conn = DatabaseManager.getConnection()){
+        try (Connection conn = DatabaseManager.getConnection()) {
             var statement = "SELECT username, userData FROM user WHERE username=?";
-            try (PreparedStatement ps = conn.prepareStatement(statement)){
-                ps.setString(1,username);
-                try (ResultSet rs = ps.executeQuery()){
-                    if (rs.next()){
+            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                ps.setString(1, username);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
                         return readUser(rs);
                     }
                 }
             }
-            }  catch (SQLException e){
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Unable to connect");
+        } catch (SQLException e) {
+            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to connect");
         }
         return null;
     }
@@ -75,9 +79,10 @@ public class MySQLUserDAO implements UserDAO{
 
             }
         } catch (SQLException e) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Unable to update database");
+            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to update database");
         }
     }
+
     private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS user (
@@ -97,7 +102,7 @@ public class MySQLUserDAO implements UserDAO{
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Unable to configure database");
+            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to configure database");
         }
     }
 }
