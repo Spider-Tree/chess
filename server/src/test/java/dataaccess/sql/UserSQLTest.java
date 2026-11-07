@@ -31,56 +31,37 @@ class UserSQLTest {
 
     @Test
     void clear() throws DataAccessException {
+        testUserDAO.createUser(testUserData);
+        testUserDAO.clear();
 
-        testUserService.clear();
-        assertThrows(DataAccessException.class, () -> {
-            testUserService.loginUser(new LoginRequest(testUserData.username(), testUserData.password()));
-        });
-
+        assertNull(testUserDAO.getUser(testUserData.username()));
     }
 
     @Test
     void addUser() throws DataAccessException {
-        UserData tempUser = new UserData("Sam", "123", "sam@gmail.com");
-        UserData result = testUserService.addUser(tempUser);
-        assertEquals(tempUser, result);
+        testUserDAO.createUser(testUserData);
+        UserData result = testUserDAO.getUser(testUserData.username());
+        assertEquals(testUserData, result);
 
     }
 
-    @Test
-    void addMultipleUsers() {
 
-    }
 
     @Test
     void alreadyTaken() throws DataAccessException {
-        testUserService.addUser(new UserData("Sam", "123", "sam@gmail.com"));
+        testUserDAO.createUser(testUserData);
         assertThrows(DataAccessException.class, () -> {
-            testUserService.addUser(new UserData("Sam", "123", "sam@gmail.com"));
+            testUserDAO.createUser(testUserData);
         });
 
     }
 
     @Test
-    void loginUserExistingUser() throws DataAccessException {
-        assertEquals(testUserData, testUserService.loginUser(new LoginRequest(testUserData.username(), testUserData.password())));
+    void userDoesNotExist() throws DataAccessException {
+        assertNull(testUserDAO.getUser("DoesnexisitJohanthan"));
     }
 
-    @Test
-    void userDoesNotExist() {
-        assertThrows(DataAccessException.class, () -> {
-            testUserService.clear();
-            testUserService.loginUser(new LoginRequest(testUserData.username(), testUserData.password()));
-        });
-    }
 
-    @Test
-    void wrongPassword() {
-        DataAccessException exception = assertThrows(DataAccessException.class, () -> {
-            testUserService.loginUser(new LoginRequest(testUserData.username(), "141949wrong"));
-        });
 
-        assertEquals(DataAccessException.Code.UNAUTHORIZED_ERROR, exception.getCode());
-    }
 
 }
