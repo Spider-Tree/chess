@@ -95,6 +95,11 @@ public class MySQLGameDAO implements GameDAO {
         }
     }
 
+    public void updateGame(GameData game) throws DataAccessException{
+        var statement = "UPDATE game SET gameData = ? WHERE gameID = ?";
+        String json = new Gson().toJson(game);
+        executeUpdate(statement,json,game.gameID());
+    }
     private GameData readGame(ResultSet rs) throws SQLException {
         var json = rs.getString("gameData");
         GameData game = new Gson().fromJson(json, GameData.class);

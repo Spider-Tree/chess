@@ -16,4 +16,6 @@ public interface GameDAO {
     Collection<GameData> listGames() throws DataAccessException;
 
     void joinGame(JoinGameRequest request) throws DataAccessException;
+
+    void updateGame(GameData game) throws DataAccessException;
 }

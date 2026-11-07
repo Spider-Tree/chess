@@ -15,6 +15,11 @@ public class MemoryGameDAO implements GameDAO {
     private final HashMap<Integer, GameData> games = new HashMap<>();
 
     @Override
+    public void updateGame(GameData game) throws DataAccessException {
+
+    }
+
+    @Override
     public void clear() throws DataAccessException {
         games.clear();
     }
