@@ -16,8 +16,8 @@ class AuthSQLTest {
     private static AuthData testAuthData;
 
     @BeforeAll
-    public static void initialization(){
-         testAuthData = new AuthData("1234authtoken","testuser1");
+    public static void initialization() {
+        testAuthData = new AuthData("1234authtoken", "testuser1");
     }
 
     @BeforeEach
@@ -29,7 +29,7 @@ class AuthSQLTest {
     @Test
     void clear() throws DataAccessException {
         testAuthDAO.createAuth(testAuthData);
-        testAuthDAO.createAuth(new AuthData("token 2","user2"));
+        testAuthDAO.createAuth(new AuthData("token 2", "user2"));
 
         testAuthDAO.clear();
 
@@ -38,14 +38,11 @@ class AuthSQLTest {
     }
 
 
-
-
     @Test
     void createAuth() throws DataAccessException {
         testAuthDAO.createAuth(testAuthData);
-        assertEquals(testAuthData,testAuthDAO.getAuth(testAuthData.authToken()));
+        assertEquals(testAuthData, testAuthDAO.getAuth(testAuthData.authToken()));
     }
-
 
 
     @Test

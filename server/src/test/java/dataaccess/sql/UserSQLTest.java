@@ -19,9 +19,10 @@ class UserSQLTest {
     private static UserData testUserData;
 
     @BeforeAll
-    public static void initialization(){
-         testUserData = new UserData("testUser","hashedPassword","testing@gmail.com");
+    public static void initialization() {
+        testUserData = new UserData("testUser", "hashedPassword", "testing@gmail.com");
     }
+
     @BeforeEach
     public void setup() throws DataAccessException {
         testUserDAO = new MySQLUserDAO();
@@ -46,7 +47,6 @@ class UserSQLTest {
     }
 
 
-
     @Test
     void alreadyTaken() throws DataAccessException {
         testUserDAO.createUser(testUserData);
@@ -60,8 +60,6 @@ class UserSQLTest {
     void userDoesNotExist() throws DataAccessException {
         assertNull(testUserDAO.getUser("DoesnexisitJohanthan"));
     }
-
-
 
 
 }

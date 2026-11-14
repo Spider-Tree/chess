@@ -29,11 +29,13 @@ class GameSQLTest {
             }
         }
     }
+
     @BeforeAll
-    public static void initialization(){
-        testGameData = new GameData(12345678,"whiteTestUser","blackTestUser","testGame",new ChessGame());
-        joinTestGameData = new GameData(12345812,null,null,"joinable",new ChessGame());
+    public static void initialization() {
+        testGameData = new GameData(12345678, "whiteTestUser", "blackTestUser", "testGame", new ChessGame());
+        joinTestGameData = new GameData(12345812, null, null, "joinable", new ChessGame());
     }
+
     @BeforeEach
     public void setup() throws DataAccessException {
         testGameDAO = new MySQLGameDAO();
@@ -106,13 +108,13 @@ class GameSQLTest {
     }
 
     @Test
-    void movesStored() throws Exception{
+    void movesStored() throws Exception {
         ChessGame chessGame = new ChessGame();
-        GameData game = new GameData(1234,"whiteUser","blackUser","testGame3",chessGame);
+        GameData game = new GameData(1234, "whiteUser", "blackUser", "testGame3", chessGame);
         testGameDAO.createGame(game);
 
-        chessGame.makeMove(new ChessMove(new ChessPosition(2,5),new ChessPosition(4,5),null));
-        chessGame.makeMove(new ChessMove(new ChessPosition(7,5),new ChessPosition(5,5),null));
+        chessGame.makeMove(new ChessMove(new ChessPosition(2, 5), new ChessPosition(4, 5), null));
+        chessGame.makeMove(new ChessMove(new ChessPosition(7, 5), new ChessPosition(5, 5), null));
         testGameDAO.updateGame(game);
 
         GameData restoredGame = testGameDAO.getGame(1234);
@@ -123,6 +125,7 @@ class GameSQLTest {
         assertEquals(ChessGame.TeamColor.WHITE, restoredGame.game().getTeamTurn());
 
     }
+
     @Test
     void kingPositionStored() throws DataAccessException {
         ChessBoard board = new ChessBoard();
@@ -137,7 +140,6 @@ class GameSQLTest {
         assertEquals(new ChessPosition(3, 4), restored.game().getKingPosition(ChessGame.TeamColor.WHITE));
         assertEquals(new ChessPosition(8, 5), restored.game().getKingPosition(ChessGame.TeamColor.BLACK));
     }
-
 
 
 }
