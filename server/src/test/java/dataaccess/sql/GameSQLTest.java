@@ -6,6 +6,7 @@ import model.GameData;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import server.JoinGameRequest;
 
 
 import java.util.Collection;
@@ -136,6 +137,23 @@ class GameSQLTest {
 
         assertEquals(new ChessPosition(3, 4), restored.game().getKingPosition(ChessGame.TeamColor.WHITE));
         assertEquals(new ChessPosition(8, 5), restored.game().getKingPosition(ChessGame.TeamColor.BLACK));
+    }
+    @Test
+    void playersJoin() throws DataAccessException{
+        testGameDAO.createGame(joinTestGameData);
+
+        JoinGameRequest requestBlack = new JoinGameRequest(ChessGame.TeamColor.BLACK,joinTestGameData.gameID(),"blackPlayer");
+        JoinGameRequest requestWhite = new JoinGameRequest(ChessGame.TeamColor.WHITE,joinTestGameData.gameID(),"whitePlayer");
+        testGameDAO.joinGame(requestBlack);
+        testGameDAO.joinGame(requestWhite);
+        GameData result = testGameDAO.getGame(joinTestGameData.gameID());
+
+        assertNotNull(result);
+
+        assertEquals("blackPlayer",result.blackUsername());
+        assertEquals("whitePlayer",result.whiteUsername());
+        assertEquals(joinTestGameData.gameName(),result.gameName());
+        assertEquals(joinTestGameData.game(),result.game());
     }
 
 
