@@ -74,4 +74,52 @@ public class DatabaseManager {
         var port = Integer.parseInt(props.getProperty("db.port"));
         connectionUrl = String.format("jdbc:mysql://%s:%d", host, port);
     }
+    public static int executeUpdate(String statement, Object... params)
+            throws DataAccessException {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(statement)) {
+            for (int i = 0; i < params.length; i++) {
+                Object param = params[i];
+                if (param instanceof String value) {
+                    ps.setString(i + 1, value);
+                } else if (param instanceof Integer value) {
+                    ps.setInt(i + 1, value);
+                } else if (param == null) {
+                    ps.setNull(i + 1, Types.NULL);
+                } else {
+                    ps.setObject(i + 1, param);
+                }
+            }
+
+            return ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DataAccessException(
+                    DataAccessException.Code.SERVER_ERROR,
+                    "Error: Unable to update database",
+                    e
+            );
+        }
+    }
+
+    public static void configureDatabase(String[] createStatements)
+            throws DataAccessException {
+        createDatabase();
+
+        try (Connection conn = getConnection()) {
+            for (String statement : createStatements) {
+                try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                    ps.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException(
+                    DataAccessException.Code.SERVER_ERROR,
+                    "Error: Unable to configure database",
+                    e
+            );
+        }
+    }
+
+
 }

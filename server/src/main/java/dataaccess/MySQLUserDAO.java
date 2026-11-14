@@ -13,13 +13,13 @@ import static java.sql.Types.NULL;
 
 public class MySQLUserDAO implements UserDAO {
     public MySQLUserDAO() throws DataAccessException {
-        configureUserDatabase();
+        DatabaseManager.configureDatabase(createStatements);
     }
 
     @Override
     public void clear() throws DataAccessException {
         var statement = "TRUNCATE user";
-        executeUpdate(statement);
+        DatabaseManager.executeUpdate(statement);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class MySQLUserDAO implements UserDAO {
         }
         var statement = "INSERT INTO user (username, userData) VALUES (?, ?)";
         String json = new Gson().toJson(userdata);
-        executeUpdate(statement, userdata.username(), json);
+        DatabaseManager.executeUpdate(statement, userdata.username(), json);
     }
 
     @Override
@@ -61,27 +61,7 @@ public class MySQLUserDAO implements UserDAO {
         return null;
     }
 
-    private void executeUpdate(String statement, Object... params) throws DataAccessException {
-        try (Connection conn = DatabaseManager.getConnection()) {
-            try (PreparedStatement ps = conn.prepareStatement(statement)) {
-                for (int i = 0; i < params.length; i++) {
-                    Object param = params[i];
-                    if (param instanceof String p) {
-                        ps.setString(i + 1, p);
-                    } else if (param instanceof Integer p) {
-                        ps.setInt(i + 1, p);
-                    } else if (param == null) {
-                        ps.setNull(i + 1, NULL);
-                    }
-                }
-                ps.executeUpdate();
 
-
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to update database");
-        }
-    }
 
     private final String[] createStatements = {
             """
@@ -93,16 +73,4 @@ public class MySQLUserDAO implements UserDAO {
             """
     };
 
-    private void configureUserDatabase() throws DataAccessException {
-        DatabaseManager.createDatabase();
-        try (Connection conn = DatabaseManager.getConnection()) {
-            for (String statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to configure database");
-        }
-    }
 }

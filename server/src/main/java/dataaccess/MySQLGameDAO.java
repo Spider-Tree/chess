@@ -15,13 +15,13 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 public class MySQLGameDAO implements GameDAO {
     public MySQLGameDAO() throws DataAccessException {
-        configureGameDatabase();
+        DatabaseManager.configureDatabase(createStatements);
     }
 
     @Override
     public void clear() throws DataAccessException {
         var statement = "TRUNCATE game";
-        executeUpdate(statement);
+        DatabaseManager.executeUpdate(statement);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class MySQLGameDAO implements GameDAO {
     public void createGame(GameData game) throws DataAccessException {
         var statement = "INSERT INTO game (gameID,gameData) VALUES (?, ?)";
         String json = new Gson().toJson(game);
-        executeUpdate(statement, game.gameID(), json);
+        DatabaseManager.executeUpdate(statement, game.gameID(), json);
 
     }
 
@@ -82,7 +82,7 @@ public class MySQLGameDAO implements GameDAO {
                             game.blackUsername(),
                             game.gameName(),
                             game.game());
-            executeUpdate(statement, new Gson().toJson(updated), request.gameID());
+            DatabaseManager.executeUpdate(statement, new Gson().toJson(updated), request.gameID());
         } else {
             GameData updated =
                     new GameData(
@@ -91,14 +91,14 @@ public class MySQLGameDAO implements GameDAO {
                             request.username(),
                             game.gameName(),
                             game.game());
-            executeUpdate(statement, new Gson().toJson(updated), request.gameID());
+            DatabaseManager.executeUpdate(statement, new Gson().toJson(updated), request.gameID());
         }
     }
 
     public void updateGame(GameData game) throws DataAccessException{
         var statement = "UPDATE game SET gameData = ? WHERE gameID = ?";
         String json = new Gson().toJson(game);
-        executeUpdate(statement,json,game.gameID());
+        DatabaseManager.executeUpdate(statement,json,game.gameID());
     }
     private GameData readGame(ResultSet rs) throws SQLException {
         var json = rs.getString("gameData");
@@ -106,32 +106,7 @@ public class MySQLGameDAO implements GameDAO {
         return game;
     }
 
-    private int executeUpdate(String statement, Object... params) throws DataAccessException {
-        try (Connection conn = DatabaseManager.getConnection()) {
-            try (PreparedStatement ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
-                for (int i = 0; i < params.length; i++) {
-                    Object param = params[i];
-                    if (param instanceof String p) {
-                        ps.setString(i + 1, p);
-                    } else if (param instanceof Integer p) {
-                        ps.setInt(i + 1, p);
-                    } else if (param == null) {
-                        ps.setNull(i + 1, NULL);
-                    }
-                }
-                ps.executeUpdate();
 
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-
-                return 0;
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to update database");
-        }
-    }
 
     private final String[] createStatements = {
             """
@@ -143,16 +118,5 @@ public class MySQLGameDAO implements GameDAO {
             """
     };
 
-    private void configureGameDatabase() throws DataAccessException {
-        DatabaseManager.createDatabase();
-        try (Connection conn = DatabaseManager.getConnection()) {
-            for (String statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to configure database");
-        }
-    }
+
 }

@@ -13,20 +13,20 @@ import static java.sql.Types.NULL;
 public class MySQLAuthDAO implements AuthDAO {
 
     public MySQLAuthDAO() throws DataAccessException {
-        configureAuthDatabase();
+        DatabaseManager.configureDatabase(createStatements);
     }
 
     @Override
     public void clear() throws DataAccessException {
         var statement = "TRUNCATE auth";
-        executeUpdate(statement);
+        DatabaseManager.executeUpdate(statement);
     }
 
     @Override
     public void createAuth(AuthData authdata) throws DataAccessException {
         var statement = "INSERT INTO auth (authToken, authData) VALUES (?, ?)";
         String json = new Gson().toJson(authdata);
-        executeUpdate(statement, authdata.authToken(), json);
+        DatabaseManager.executeUpdate(statement, authdata.authToken(), json);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class MySQLAuthDAO implements AuthDAO {
     @Override
     public void deleteAuth(String authToken) throws DataAccessException {
         var statement = "DELETE FROM auth WHERE authToken=?";
-        executeUpdate(statement, authToken);
+        DatabaseManager.executeUpdate(statement, authToken);
     }
 
     @Override
@@ -74,38 +74,7 @@ public class MySQLAuthDAO implements AuthDAO {
             """
     };
 
-    private void executeUpdate(String statement, Object... params) throws DataAccessException {
-        try (Connection conn = DatabaseManager.getConnection()) {
-            try (PreparedStatement ps = conn.prepareStatement(statement)) {
-                for (int i = 0; i < params.length; i++) {
-                    Object param = params[i];
-                    if (param instanceof String p) {
-                        ps.setString(i + 1, p);
-                    } else if (param instanceof Integer p) {
-                        ps.setInt(i + 1, p);
-                    } else if (param == null) {
-                        ps.setNull(i + 1, NULL);
-                    }
-                }
-                ps.executeUpdate();
 
 
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to update database");
-        }
-    }
 
-    private void configureAuthDatabase() throws DataAccessException {
-        DatabaseManager.createDatabase();
-        try (Connection conn = DatabaseManager.getConnection()) {
-            for (String statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataAccessException(DataAccessException.Code.SERVER_ERROR, "Error: Unable to configure database");
-        }
-    }
 }
