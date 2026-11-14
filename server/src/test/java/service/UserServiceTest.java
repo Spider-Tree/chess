@@ -6,6 +6,7 @@ import model.UserData;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
 import server.LoginRequest;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,6 +18,7 @@ class UserServiceTest {
     @BeforeAll
     public static void init() {
         testUserService = new UserService(new MemoryUserDAO());
+
         testUserData = new UserData("testUser", "123test", "testingUser@gmail.com");
 
     }
@@ -46,14 +48,13 @@ class UserServiceTest {
     void addUser() throws DataAccessException {
         UserData tempUser = new UserData("Sam", "123", "sam@gmail.com");
         UserData result = testUserService.addUser(tempUser);
-        assertEquals(tempUser, result);
+
+        assertTrue(BCrypt.checkpw(tempUser.password(), result.password()));
+        assertEquals(tempUser.email(), result.email());
+        assertEquals(tempUser.username(), result.username());
 
     }
 
-    @Test
-    void addMultipleUsers() {
-
-    }
 
     @Test
     void alreadyTaken() throws DataAccessException {
@@ -66,7 +67,12 @@ class UserServiceTest {
 
     @Test
     void loginUserExistingUser() throws DataAccessException {
-        assertEquals(testUserData, testUserService.loginUser(new LoginRequest(testUserData.username(), testUserData.password())));
+        UserData loginResult=testUserService.loginUser(new LoginRequest(testUserData.username(), testUserData.password()));
+
+        assertTrue(BCrypt.checkpw(testUserData.password(), loginResult.password()));
+        assertEquals(testUserData.email(), loginResult.email());
+        assertEquals(testUserData.username(), loginResult.username());
+
     }
 
     @Test
