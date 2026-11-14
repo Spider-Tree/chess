@@ -1,16 +1,11 @@
 package dataaccess.sql;
 
 import dataaccess.DataAccessException;
-import dataaccess.MySQLAuthDAO;
-import dataaccess.MySQLUserDAO;
 import dataaccess.UserDAO;
-import model.AuthData;
 import model.UserData;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import server.LoginRequest;
-import service.UserService;
 
 import static org.junit.jupiter.api.Assertions.*;
 

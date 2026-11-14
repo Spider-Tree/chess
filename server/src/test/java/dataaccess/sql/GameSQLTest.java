@@ -3,12 +3,9 @@ package dataaccess.sql;
 import chess.*;
 import dataaccess.*;
 import model.GameData;
-import model.UserData;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import server.JoinGameRequest;
-import service.GameService;
 
 
 import java.util.Collection;

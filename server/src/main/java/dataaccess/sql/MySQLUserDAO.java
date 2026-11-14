@@ -1,6 +1,8 @@
-package dataaccess;
+package dataaccess.sql;
 
 import com.google.gson.Gson;
+import dataaccess.DataAccessException;
+import dataaccess.UserDAO;
 import model.UserData;
 
 import java.sql.Connection;
@@ -8,8 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-
-import static java.sql.Types.NULL;
 
 public class MySQLUserDAO implements UserDAO {
     public MySQLUserDAO() throws DataAccessException {
