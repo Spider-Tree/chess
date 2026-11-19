@@ -16,4 +16,32 @@ public class ChessClient {
         server = new ServerFacade(serverURL);
 
     }
+    public void run() {
+        System.out.println("Welcome to the chess game. Sign in to start");
+        System.out.print(help());
+
+        Scanner scanner = new Scanner(System.in);
+    }
+
+    public String help(){
+        if (state==State.SIGNEDOUT){
+            return """
+                    - register <USERNAME> <PASSWORD> <EMAIL> - to create an acccount
+                    - login <USERNAME> <PASSWORD> - to play chess
+                    - quit
+                    - help - lists possible commands
+                    """;
+        }
+        else{
+            return """
+                    - create <NAME> - create a game
+                    - join <ID> [WHITE|BLACK] - join a game
+                    - observe <ID> - watch a game
+                    - logout
+                    - quit
+                    - help - lists possible commands
+                    """;
+        }
+
+    }
 }
