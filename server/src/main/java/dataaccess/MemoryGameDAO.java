@@ -2,6 +2,7 @@ package dataaccess;
 
 import chess.ChessGame;
 
+import dataaccess.exception.DataAccessException;
 import model.GameData;
 
 import server.JoinGameRequest;

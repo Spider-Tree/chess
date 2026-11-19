@@ -1,10 +1,11 @@
-package dataaccess;
+package client;
+
 
 import com.google.gson.Gson;
 
 import java.util.Map;
 
-public class DataAccessException extends Exception {
+public class ResponseException extends Exception {
 
     public enum Code {
         SERVER_ERROR,
@@ -15,12 +16,12 @@ public class DataAccessException extends Exception {
 
     private final Code code;
 
-    public DataAccessException(Code code, String message) {
+    public ResponseException(Code code, String message) {
         super(message);
         this.code = code;
     }
 
-    public DataAccessException(Code code, String message, Throwable ex) {
+    public ResponseException(Code code, String message, Throwable ex) {
         super(message);
         this.code = code;
     }

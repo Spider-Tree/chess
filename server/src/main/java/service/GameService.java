@@ -1,7 +1,7 @@
 package service;
 
 import chess.ChessGame;
-import dataaccess.DataAccessException;
+import dataaccess.exception.DataAccessException;
 import dataaccess.GameDAO;
 import model.GameData;
 import server.JoinGameRequest;

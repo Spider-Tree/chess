@@ -1,7 +1,7 @@
 package dataaccess.sql;
 
 import com.google.gson.Gson;
-import dataaccess.DataAccessException;
+import dataaccess.exception.DataAccessException;
 import dataaccess.GameDAO;
 import model.GameData;
 import server.JoinGameRequest;

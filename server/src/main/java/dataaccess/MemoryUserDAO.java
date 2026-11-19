@@ -1,6 +1,6 @@
 package dataaccess;
 
-import chess.ChessGame;
+import dataaccess.exception.DataAccessException;
 import model.*;
 
 import java.util.HashMap;

@@ -1,6 +1,6 @@
 package service;
 
-import dataaccess.DataAccessException;
+import dataaccess.exception.DataAccessException;
 import dataaccess.UserDAO;
 import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;

@@ -2,7 +2,7 @@ package server;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
-import dataaccess.*;
+import dataaccess.exception.DataAccessException;
 import dataaccess.sql.MySQLAuthDAO;
 import dataaccess.sql.MySQLGameDAO;
 import dataaccess.sql.MySQLUserDAO;
