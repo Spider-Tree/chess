@@ -45,6 +45,16 @@ public class ResponseException extends Exception {
             case UNAUTHORIZED_ERROR -> 401;
         };
     }
+    public static Code fromHttpStatusCode(int httpStatusCode){
+        return switch (httpStatusCode){
+            case 500 -> Code.SERVER_ERROR;
+            case 400 -> Code.CLIENT_ERROR;
+            case 403 -> Code.ALREADY_TAKEN_ERROR;
+            case 401 -> Code.UNAUTHORIZED_ERROR;
+            default -> throw new IllegalArgumentException("UNknow Http status code");
+        };
+    }
+
 
     public Code getCode() {
         return code;

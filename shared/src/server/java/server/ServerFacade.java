@@ -16,9 +16,11 @@ public class ServerFacade {
     public ServerFacade(String url){
         serverUrl = url;
     }
-    public void logIn(String username,String password){
+    public AuthData logIn(String username,String password) throws ResponseException {
     var request = buildRequest("POST", "/session",username+" "+password);
     var response = sendRequest(request);
+    //not correct yet
+    return handleResponse(response,AuthData.class);
     }
 
     private HttpRequest buildRequest(String method, String path, Object body){
@@ -46,6 +48,7 @@ public class ServerFacade {
             throw new ResponseException(ResponseException.Code.SERVER_ERROR,ex.getMessage());
         }
     }
+
     private <T> T handleResponse(HttpResponse<String> response, Class<T> responseClass) throws ResponseException{
         var status = response.statusCode();
         if (!isSuccessful(status)){
@@ -53,7 +56,13 @@ public class ServerFacade {
             if (body != null){
                 throw ResponseException.fromJson(body);
             }
+            throw new ResponseException(ResponseException.fromHttpStatusCode(status),"other failure" +status);
         }
+
+        if (responseClass != null){
+            return new Gson().fromJson(response.body(), responseClass);
+        }
+        return null;
     }
     private boolean isSuccessful(int status){
         return status / 100 ==2;
