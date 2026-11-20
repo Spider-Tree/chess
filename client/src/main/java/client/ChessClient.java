@@ -2,9 +2,8 @@ package client;
 import java.util.Scanner;
 import java.util.Arrays;
 
-import com.google.gson.Gson;
+import exception.ResponseException;
 
-import model.*;
 import server.ServerFacade;
 
 import static ui.EscapeSequences.*;
@@ -12,7 +11,7 @@ public class ChessClient {
     private String username=null;
     private final ServerFacade server;
     private State state = State.SIGNEDOUT;
-    public ChessClient(String serverURL) throws ResponseException{
+    public ChessClient(String serverURL) throws ResponseException {
         server = new ServerFacade(serverURL);
 
     }
@@ -34,6 +33,7 @@ public class ChessClient {
                 System.out.print(msg);
             }
         }
+        System.out.println();
     }
     private void printPrompt(){
         System.out.print("\n"+ RESET_TEXT_COLOR+">>> "+SET_TEXT_COLOR_GREEN);
@@ -60,7 +60,14 @@ public class ChessClient {
     }
 
     public String logIn(String... params) throws ResponseException{
-        return null;
+        if (params.length >=1){
+            try {
+                String username = params[0];
+                String password = params[1];
+
+            }
+        }
+        throw new ResponseException(ResponseException.Code.CLIENT_ERROR,"Expected: <username> <password>");
     }
     public String register(String... params) throws ResponseException{
         return null;
@@ -98,5 +105,11 @@ public class ChessClient {
                     """;
         }
 
+    }
+
+    private void assertLogIn() throws ResponseException{
+        if (state == State.SIGNEDOUT){
+            throw new ResponseException(ResponseException.Code.UNAUTHORIZED_ERROR,"You must sing in ");
+        }
     }
 }
